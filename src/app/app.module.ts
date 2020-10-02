@@ -4,7 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 
-import * as fromActions from '../store/reducers/reducer';
+import * as fromGlobalActions from '../store/reducers/global.reducer';
+import * as fromFranceActions from '../store/reducers/france.reducer';
+import * as fromUSActions from '../store/reducers/us.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { ChartContainerComponent } from './chart-container/chart-container.component';
@@ -22,7 +24,11 @@ import { FranceEffects } from '../store/effects/effects';
   ],
   imports: [
     BrowserModule,
-    StoreModule.forRoot({ config: fromActions.reducer }, {}),
+    StoreModule.forRoot({
+      globalState: fromGlobalActions.reducer,
+      franceState: fromFranceActions.reducer,
+      usState: fromUSActions.reducer
+    }, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     EffectsModule.forRoot([FranceEffects]),
     HttpClientModule,

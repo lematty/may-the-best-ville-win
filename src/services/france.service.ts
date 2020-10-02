@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-const ASSETS_PATH = '../assets';
+const DATA_PATH = '../assets/data';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +13,9 @@ export class FranceService {
 
   constructor(private http: HttpClient) { }
 
-  fetchFranceBuyData(): Observable<UniversalBuyListingProperties[]> {
-    const url = `${ASSETS_PATH}/${Country.France}-${PaymentType.Buy}-output.json`;
-    console.log('url: ', url);
-    return this.http.get<FranceBuyListingJsonFormat[]>(url).pipe(
-      map((listings: FranceBuyListingJsonFormat[]) => this.unifyFranceData(listings))
-    );
+  fetchFranceBuyData(): Observable<FranceBuyListingJsonFormat[]> {
+    const url = `${DATA_PATH}/output/${Country.France}-${PaymentType.Buy}-output.json`;
+    return this.http.get<FranceBuyListingJsonFormat[]>(url);
   }
 
   fetchFranceRentData(): Observable<any> {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectCountry, selectGraphType, selectMetric, selectSelectedCities } from '../../store/selectors/selectors';
-import { State } from '../../store/reducers/reducer';
+import { AppState, selectCountry, selectGraphType, selectMetric, selectSelectedCities } from '../../store/selectors/selectors';
 import * as fromActions from '../../store/actions/actions';
 import * as fromFranceActions from '../../store/actions/france.actions';
 import { Observable } from 'rxjs';
@@ -19,7 +18,7 @@ export class ChartContainerComponent implements OnInit {
   public selectedMetric$: Observable<UniversalMetrics> = this.store.select(selectMetric);
   public graphType$: Observable<GraphType> = this.store.select(selectGraphType);
 
-  constructor(private store: Store<State>) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.store.dispatch(fromFranceActions.fetchFranceBuyData());

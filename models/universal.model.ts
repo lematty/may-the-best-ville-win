@@ -1,5 +1,5 @@
 import { FranceBuyListingJsonFormat, FranceCityList } from './france.model';
-import { FormattedUsBuyListing, UsCityList } from './us.model';
+import { UsBuyListingJsonFormat, UsCityList } from './us.model';
 
 export enum DataDirection {
   Pull = 'pull',
@@ -42,6 +42,6 @@ export enum UniversalMetrics {
 
 export type GraphType = 'bar' | 'scatter' | 'pie';
 export type FranceMetrics = keyof FranceBuyListingJsonFormat;
-export type UsMetrics = keyof FormattedUsBuyListing;
+export type UsMetrics = keyof UsBuyListingJsonFormat;
 
 export type AllCitiesList = Array<FranceCityList | UsCityList>;
