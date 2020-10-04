@@ -1,17 +1,11 @@
-import { FranceBuyListingJsonFormat, UniversalBuyListingProperties } from '../../../models';
 import { createReducer, Action, on } from '@ngrx/store';
 import * as fromFranceActions from '../actions/france.actions';
-
-export interface FranceState {
-  franceBuyJsonData: FranceBuyListingJsonFormat[];
-  franceRentJsonData: UniversalBuyListingProperties[];
-}
+import { FranceState } from '../models';
 
 export const initialFranceState: FranceState = {
   franceBuyJsonData: [],
   franceRentJsonData: [],
 };
-
 
 const franceReducer = createReducer(
   initialFranceState,

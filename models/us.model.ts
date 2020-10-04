@@ -1,7 +1,3 @@
-export interface UsBuyListingRawFormat {
-  // TODO: poplate list
-}
-
 export interface UsBuyListingJsonFormat {
   idannonce: number;
   bu: string;
@@ -20,6 +16,11 @@ export interface UsBuyListingJsonFormat {
   monthlyPayment: number;
   geometry: string;
 }
+
+export type UsRentListingJsonFormat = Omit<UsBuyListingJsonFormat, 'monthlyPayment'>;
+
+export type UsUniversalListingJsonFormat = UsBuyListingJsonFormat | UsRentListingJsonFormat;
+
 
 export enum UsCityList {
   Denver = 'Denver',

@@ -1,5 +1,5 @@
-import { FranceBuyListingJsonFormat, FranceCityList } from './france.model';
-import { UsBuyListingJsonFormat, UsCityList } from './us.model';
+import { FranceBuyListingJsonFormat, FranceCityList, FranceUniversalListingJsonFormat } from './france.model';
+import { UsBuyListingJsonFormat, UsCityList, UsUniversalListingJsonFormat } from './us.model';
 
 export enum DataDirection {
   Pull = 'pull',
@@ -16,7 +16,7 @@ export enum PaymentType {
   Rent = 'rent',
 }
 
-export interface UniversalBuyListingProperties {
+export interface UniversalListingProperties {
   price: number;
   city: string;
   surfaceArea: number;
@@ -27,6 +27,8 @@ export interface UniversalBuyListingProperties {
   link: string;
   postalCode: number;
 }
+
+export type UniversalListingJsonFormat = UsUniversalListingJsonFormat | FranceUniversalListingJsonFormat;
 
 export enum UniversalMetrics {
   Price = 'price',
@@ -40,7 +42,6 @@ export enum UniversalMetrics {
   PostalCode = 'postalCode'
 }
 
-export type GraphType = 'bar' | 'scatter' | 'pie';
 export type FranceMetrics = keyof FranceBuyListingJsonFormat;
 export type UsMetrics = keyof UsBuyListingJsonFormat;
 

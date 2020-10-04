@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
@@ -12,15 +13,17 @@ import { environment } from '../environments/environment';
 import { ChartContainerComponent } from './chart-container/chart-container.component';
 import { SettingsContainerComponent } from './settings-container/settings-container.component';
 import { EffectsModule } from '@ngrx/effects';
-import { HttpClientModule } from '@angular/common/http';
-import { FranceEffects } from '../store/effects/effects';
+import { FranceEffects } from '../store/effects/france.effects';
+import { GlobalEffects } from '../store/effects/global.effects';
+import { ScatterChartComponent } from './scatter-chart/scatter-chart.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ChartContainerComponent,
-    SettingsContainerComponent
+    SettingsContainerComponent,
+    ScatterChartComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,7 @@ import { FranceEffects } from '../store/effects/effects';
       usState: fromUSActions.reducer
     }, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([FranceEffects]),
+    EffectsModule.forRoot([FranceEffects, GlobalEffects]),
     HttpClientModule,
   ],
   providers: [],

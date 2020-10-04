@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState, selectCountry, selectGraphType, selectMetric, selectSelectedCities } from '../../store/selectors/selectors';
-import * as fromActions from '../../store/actions/actions';
-import * as fromFranceActions from '../../store/actions/france.actions';
+import { selectCountry, selectChartType, selectMetric, selectCities, selectUniformData, selectChartOptions } from '../../store/selectors/global.selectors';
+import * as fromActions from '../../store/actions';
 import { Observable } from 'rxjs';
-import { Country, UniversalMetrics, GraphType } from '../../../models';
-import { AllCitiesList } from '../../../models/universal.model';
+import { AllCitiesList, Country, UniversalMetrics, UniversalListingProperties } from '../../../models';
+import { AppState } from '../../store/models';
+import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
 
 @Component({
   selector: 'app-chart-container',
@@ -14,34 +14,42 @@ import { AllCitiesList } from '../../../models/universal.model';
 })
 export class ChartContainerComponent implements OnInit {
   public country$: Observable<Country> = this.store.select(selectCountry);
-  public selectedCities$: Observable<AllCitiesList[]> = this.store.select(selectSelectedCities);
+  public selectedCities$: Observable<AllCitiesList[]> = this.store.select(selectCities);
   public selectedMetric$: Observable<UniversalMetrics> = this.store.select(selectMetric);
-  public graphType$: Observable<GraphType> = this.store.select(selectGraphType);
+  public unifiedData$: Observable<UniversalListingProperties[]> = this.store.select(selectUniformData);
+  public chartType$: Observable<ChartType> = this.store.select(selectChartType);
+  public options$: Observable<ChartOptions> = this.store.select(selectChartOptions);
+  public datasets: ChartDataSets[] = [];
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    this.store.dispatch(fromFranceActions.fetchFranceBuyData());
+    this.chartType$.subscribe(chartType => this.formatByChartType(chartType));
   }
 
-  changeCountry(country: Country) {
-    this.store.dispatch(fromActions.updateCountry({ country }));
+  formatByChartType(chartType: ChartType) {
+    switch (chartType) {
+      case 'bar':
+        break;
+      case 'pie':
+        break;
+      case 'scatter':
+        // this.formatScatterChartDatasets();
+        break;
+      default:
+        break;
+    }
   }
 
-  addCity(city: AllCitiesList) {
-    this.store.dispatch(fromActions.addCity({ city }));
-  }
+  // formatScatterChartDatasets() {
+  //   this.datasets = [{
+  //     label: listing
+  //     data: .map(listing: UniversalBuyListingProperties) => {
+  //       label: listing.city,
+  //       data: 
+  //     } as ChartDataSets;
+  //   }];
 
-  removeCity(city: AllCitiesList) {
-    this.store.dispatch(fromActions.removeCity({ city }));
-  }
-
-  changeMetric(metric: UniversalMetrics) {
-    this.store.dispatch(fromActions.updateSelectedMetric({ selectedMetric: metric }));
-  }
-
-  changeGraphType(graph: GraphType) {
-    this.store.dispatch(fromActions.updateGraphType({ graphType: graph }));
-  }
+  // }
 
 }

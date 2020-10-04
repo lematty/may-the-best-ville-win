@@ -1,8 +1,8 @@
 import { createAction, props } from '@ngrx/store';
-import { UniversalBuyListingProperties } from '../../../models';
+import { UsBuyListingJsonFormat, UsRentListingJsonFormat } from '../../../models';
 
-export const addUSBuyData = createAction('[US] Add US buy data to store', props<{ data: UniversalBuyListingProperties[] }>());
-export const addUSRentData = createAction('[US] Add US rent data to store', props<{ data: UniversalBuyListingProperties[] }>());
+export const addUsBuyData = createAction('[US] Add US buy data to store', props<{ data: UsBuyListingJsonFormat[] }>());
+export const addUsRentData = createAction('[US] Add US rent data to store', props<{ data: UsRentListingJsonFormat[] }>());
 
-export const fetchUSBuyData = createAction('[US] Fetch US buy data from json');
-export const fetchUSRentData = createAction('[US] Fetch US rent data from json');
+export const fetchUsBuyData = createAction('[US] Fetch US buy data from json');
+export const fetchUsRentData = createAction('[US] Fetch US rent data from json');

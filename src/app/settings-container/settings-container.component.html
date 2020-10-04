@@ -1,1 +1,19 @@
 <p>settings-container works!</p>
+<div>
+  <div>Chart Type</div>
+  <select (change)="updateChartType($event.target.value)">
+    <option *ngFor="let type of chartTypes" value="{{ type }}">{{ type }}</option>
+  </select>
+</div>
+<div>
+  <div>Country</div>
+  <select (change)="updateCountry($event.target.value)">
+    <option *ngFor="let country of countries" value="{{ country }}">{{ country }}</option>
+  </select>
+</div>
+<div>
+  <div>Payment Type</div>
+  <select (change)="updatePaymentType($event.target.value)">
+    <option *ngFor="let payment of paymentTypes" value="{{ payment }}">{{ payment }}</option>
+  </select>
+</div>

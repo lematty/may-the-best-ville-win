@@ -1,1 +1,9 @@
 <p>chart-container works!</p>
+<app-scatter-chart
+  *ngIf="(chartType$ | async) === 'scatter'"
+  [title]="country$ | async"
+  [datasets]="{
+    
+  }"
+  [options]="options$ | async">
+</app-scatter-chart>

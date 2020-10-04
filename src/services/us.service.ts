@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { UsBuyListingJsonFormat, UniversalBuyListingProperties } from '../../models';
+import {
+  UniversalListingProperties,
+  PaymentType,
+  UsBuyListingJsonFormat,
+  UsRentListingJsonFormat,
+  UsUniversalListingJsonFormat
+} from '../../models';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 const ASSETS_PATH = '../assets';
@@ -13,7 +18,19 @@ export class UsService {
 
   constructor(private http: HttpClient) { }
 
-  unifyUsData(listings: UsBuyListingJsonFormat[]): UniversalBuyListingProperties[]  {
+  fetchUsBuyData(url: string): Observable<UsBuyListingJsonFormat[]> {
+    return this.http.get<UsBuyListingJsonFormat[]>(url);
+  }
+
+  fetchUsRentData(url: string): Observable<UsRentListingJsonFormat[]> {
+    return this.http.get<UsRentListingJsonFormat[]>(url);
+  }
+
+  unifyUsData(listings: UsUniversalListingJsonFormat[]): UniversalListingProperties[]  {
+    return;
+  }
+
+  getUsData(paymentType: PaymentType): Observable<UsUniversalListingJsonFormat[]> {
     return;
   }
 }

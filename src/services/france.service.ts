@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Country, FranceBuyListingJsonFormat, PaymentType, UniversalBuyListingProperties } from '../../models';
+import {
+  Country,
+  FranceUniversalListingJsonFormat,
+  PaymentType,
+  UniversalListingProperties,
+} from '../../models';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 const DATA_PATH = '../assets/data';
@@ -13,17 +17,13 @@ export class FranceService {
 
   constructor(private http: HttpClient) { }
 
-  fetchFranceBuyData(): Observable<FranceBuyListingJsonFormat[]> {
-    const url = `${DATA_PATH}/output/${Country.France}-${PaymentType.Buy}-output.json`;
-    return this.http.get<FranceBuyListingJsonFormat[]>(url);
+  getFranceData(paymentType: PaymentType): Observable<FranceUniversalListingJsonFormat[]> {
+    const url = `${DATA_PATH}/output/${Country.France}-${paymentType}-output.json`;
+    return this.http.get<FranceUniversalListingJsonFormat[]>(url);
   }
 
-  fetchFranceRentData(): Observable<any> {
-    return ;
-  }
-
-  unifyFranceData(listings: FranceBuyListingJsonFormat[]): UniversalBuyListingProperties[] {
-    return listings.map((listing: FranceBuyListingJsonFormat) => ({
+  unifyFranceData(listings: FranceUniversalListingJsonFormat[]): UniversalListingProperties[] {
+    return listings.map((listing: FranceUniversalListingJsonFormat) => ({
       price: Number(listing.prix),
       city: listing.ville,
       surfaceArea: Number(listing.surface),

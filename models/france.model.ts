@@ -43,6 +43,10 @@ export interface FranceBuyListingJsonFormat {
   geometry: string;
 }
 
+export type FranceRentListingJsonFormat = Omit<FranceBuyListingJsonFormat, 'monthlyPayment'>;
+
+export type FranceUniversalListingJsonFormat = FranceBuyListingJsonFormat | FranceRentListingJsonFormat;
+
 interface Bu {
   label: string;
   id: string;
