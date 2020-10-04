@@ -14,6 +14,18 @@ export class SettingsContainerComponent implements OnInit {
   public chartTypes: ChartType[] = ['bar', 'bubble', 'doughnut', 'horizontalBar', 'line', 'pie', 'polarArea', 'radar', 'scatter'];
   public paymentTypes = [PaymentType.Buy, PaymentType.Rent];
   public countries = [Country.France, Country.Us];
+  public xAxis = '';
+  public yAxis = '';
+  public axisOptions = [
+    UniversalMetrics.City,
+    UniversalMetrics.Latitude,
+    UniversalMetrics.Longitude,
+    UniversalMetrics.NumberOfBedrooms,
+    UniversalMetrics.NumberOfRooms,
+    UniversalMetrics.PostalCode,
+    UniversalMetrics.Price,
+    UniversalMetrics.SurfaceArea
+  ];
 
   constructor(private store: Store<AppState>) { }
 
@@ -41,7 +53,11 @@ export class SettingsContainerComponent implements OnInit {
     this.store.dispatch(fromActions.removeCity({ city }));
   }
 
-  changeMetric(metric: UniversalMetrics) {
-    this.store.dispatch(fromActions.updateSelectedMetric({ selectedMetric: metric }));
+  updateXAxis(metric: UniversalMetrics) {
+    // this.store.dispatch(fromActions.updateXAxisMetric({ selectedMetric: metric }));
+  }
+
+  updateYAxis(metric: UniversalMetrics) {
+    // this.store.dispatch(fromActions.updateYAxisMetric({ selectedMetric: metric }));
   }
 }

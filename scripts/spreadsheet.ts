@@ -1,7 +1,8 @@
 import { GoogleSpreadsheet, GoogleSpreadsheetRow, GoogleSpreadsheetWorksheet } from 'google-spreadsheet';
 import { CREDENTIALS, GOOGLE_SHEET_ID } from '../secrets';
 import * as franceBuyData from '../src/assets/data/input/france-buy.json';
-import { FranceBuyListingJsonFormat, FranceBuyListingRawFormat } from '../models/france.model';
+import * as franceRentData from '../src/assets/data/input/france-rent.json';
+import { FranceBuyListingJsonFormat, FranceUniversalListingRawFormat } from '../models/france.model';
 import * as fs from 'fs';
 
 enum DataDirection {
@@ -29,19 +30,33 @@ function createFileName(): string {
 }
 
 async function accessSpreadsheet(): Promise<GoogleSpreadsheetWorksheet> {
-  const doc = new GoogleSpreadsheet(GOOGLE_SHEET_ID);
-  await doc.useServiceAccountAuth(CREDENTIALS);
-  // doc.useApiKey('YOUR-API-KEY');
-  await doc.loadInfo();
-  const sheets = doc.sheetsByTitle;
-  const sheet = sheets[`${country}-${paymentType}`];
-  console.log(`Using sheet ${sheet.title}`);
-  return sheet;
+  try {
+    console.log('accessSpreadsheet()');
+    const doc = new GoogleSpreadsheet(GOOGLE_SHEET_ID);
+    await doc.useServiceAccountAuth(CREDENTIALS);
+    // doc.useApiKey('YOUR-API-KEY');
+    await doc.loadInfo();
+    const sheets = doc.sheetsByTitle;
+    console.log(sheets);
+    console.log(`sheet name should be ${country}-${paymentType}`);
+    const sheet = sheets[`${country}-${paymentType}`];
+    console.log(`Using sheet ${sheet.title}`);
+    return sheet;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function addDataToSpreadsheet(): Promise<void> {
-  const sheet: GoogleSpreadsheetWorksheet = await accessSpreadsheet();
-  const newListings = franceBuyData as FranceBuyListingRawFormat[];
+  let sheet: GoogleSpreadsheetWorksheet;
+  try {
+    sheet = await accessSpreadsheet();
+    console.log('sheet: ', sheet);
+  } catch (error) {
+    return error;
+  }
+  // const newListings = franceBuyData as FranceUniversalListingRawFormat[];
+  const newListings = getListingsFromJson();
   let count = 0;
   const listings = newListings.map(rawListing => {
     if (!rawListing.result.estViager) {
@@ -49,17 +64,25 @@ async function addDataToSpreadsheet(): Promise<void> {
       return formatListingForSpreadsheet(rawListing);
     }
   });
+  console.log('addRows: ', listings);
+
   await sheet.addRows(listings);
   console.log(`${count + 1} new rows added to the sheet`);
 }
 
 async function pullDataFromSpreadsheet(): Promise<void> {
-  const sheet: GoogleSpreadsheetWorksheet = await accessSpreadsheet();
-  // console.log(sheet);
-  await sheet.loadHeaderRow();
-  const sheetRows: GoogleSpreadsheetRow[] = await sheet.getRows();
+  let sheet: GoogleSpreadsheetWorksheet;
+  let sheetRows: GoogleSpreadsheetRow[];
+  try {
+    sheet = await accessSpreadsheet();
+    await sheet.loadHeaderRow();
+    sheetRows = await sheet.getRows();
+  } catch (error) {
+    console.error(error);
+    return;
+  }
   const headers = sheet.headerValues;
-  console.log(sheet.headerValues);
+  console.log('headers: ', headers);
   const formattedRows = sheetRows.map((row: GoogleSpreadsheetRow) => {
     const listing = {};
     headers.forEach((header: keyof FranceBuyListingJsonFormat) => {
@@ -76,7 +99,7 @@ async function pullDataFromSpreadsheet(): Promise<void> {
   });
 }
 
-function formatListingForSpreadsheet(rawListing: FranceBuyListingRawFormat) {
+function formatListingForSpreadsheet(rawListing: FranceUniversalListingRawFormat) {
   const listing = rawListing.result;
   console.log(listing.idannonce);
   return {
@@ -99,8 +122,13 @@ function formatListingForSpreadsheet(rawListing: FranceBuyListingRawFormat) {
   };
 }
 
+function getListingsFromJson(): FranceUniversalListingRawFormat[] {
+  const listings = paymentType === PaymentType.Buy ? franceBuyData : franceRentData;
+  return listings as FranceUniversalListingRawFormat[];
+}
+
 const fileName = createFileName();
-const outputPath = `../data/output/${fileName}`;
+const outputPath = `./src/assets/data/output/${fileName}`;
 
 if (dataDirection === DataDirection.Pull) {
   console.log('Pull');

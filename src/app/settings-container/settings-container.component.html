@@ -1,4 +1,3 @@
-<p>settings-container works!</p>
 <div>
   <div>Chart Type</div>
   <select (change)="updateChartType($event.target.value)">
@@ -7,7 +6,7 @@
 </div>
 <div>
   <div>Country</div>
-  <select (change)="updateCountry($event.target.value)">
+  <select (change)="updateCountry($event.target.value)" disabled>
     <option *ngFor="let country of countries" value="{{ country }}">{{ country }}</option>
   </select>
 </div>
@@ -15,5 +14,17 @@
   <div>Payment Type</div>
   <select (change)="updatePaymentType($event.target.value)">
     <option *ngFor="let payment of paymentTypes" value="{{ payment }}">{{ payment }}</option>
+  </select>
+</div>
+<div>
+  <div>X Axis</div>
+  <select (change)="updateXAxis($event.target.value)">
+    <option *ngFor="let option of axisOptions" value="{{ option }}">{{ option }}</option>
+  </select>
+</div>
+<div>
+  <div>Y Axis</div>
+  <select (change)="updateYAxis($event.target.value)">
+    <option *ngFor="let option of axisOptions" value="{{ option }}">{{ option }}</option>
   </select>
 </div>

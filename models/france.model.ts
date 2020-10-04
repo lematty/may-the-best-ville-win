@@ -1,4 +1,4 @@
-export interface FranceBuyListingRawFormat {
+export interface FranceUniversalListingRawFormat {
   result: {
     idannonce: number;
     bu: Bu;

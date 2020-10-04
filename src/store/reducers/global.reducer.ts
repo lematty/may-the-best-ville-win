@@ -15,15 +15,16 @@ export const initialState: GlobalState = {
     scales: {
       xAxes: [{
         type: 'linear',
-        position: 'bottom'
-      }]
-    }
+        position: 'bottom',
+      }],
+    },
   },
 };
 
 const globalReducer = createReducer(
   initialState,
   on(fromActions.updateCountry, (state, { country }) => ({ ...state, selectedCountry: country })),
+  on(fromActions.updatePaymentType, (state, { paymentType }) => ({ ...state, paymentType })),
   on(fromActions.updateSelectedMetric, (state, { selectedMetric }) => ({ ...state, selectedMetric })),
   on(fromActions.updateChartType, (state, { chartType }) => ({ ...state, chartType })),
 

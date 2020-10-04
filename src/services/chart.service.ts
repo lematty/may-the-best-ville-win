@@ -29,6 +29,7 @@ export class ChartService {
         return this.formatBarChart();
       case 'scatter':
         return this.formatScatterChart(data);
+
     }
   }
 
@@ -46,8 +47,35 @@ export class ChartService {
         citiesData[cityIndex].data = concatCityData;
       }
     });
-    let options: ChartOptions;
+    const options: ChartOptions = this.formatScatterChartOptions();
     return { datasets: citiesData, options };
+  }
+
+  getRandomColor(): string {
+    // const letters = '0123456789ABCDEF';
+    // let color = '#';
+    // for (let i = 0; i < 6; i++) {
+    //   color += letters[Math.floor(Math.random() * 16)];
+    // }
+    // return color;
+    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    return randomColor;
+  }
+
+  formatScatterChartOptions(): ChartOptions {
+    return {
+      scales: {
+        xAxes: [{
+          type: 'linear',
+          position: 'bottom',
+        }],
+        yAxes: [{
+          ticks: {
+            min: 0,
+          },
+        }]
+      },
+    };
   }
 
   formatBarChart(): any {

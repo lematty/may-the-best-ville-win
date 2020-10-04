@@ -5,6 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { selectChartDatasets } from '../../store/selectors';
 import { map } from 'rxjs/operators';
 import { AppState } from '../../store/models';
+import { ChartService } from '../../services';
 
 @Component({
   selector: 'app-scatter-chart',
@@ -18,11 +19,20 @@ export class ScatterChartComponent implements OnInit {
   chart: Chart;
 
   datasets$: Observable<ChartDataSets[]> = this.store.select(selectChartDatasets);
-  isChartBuilt = false;
-  constructor(private store: Store<AppState>) { }
+
+  constructor(private store: Store<AppState>, private chartService: ChartService) { }
 
   ngOnInit(): void {
-    this.datasets$.subscribe(((datasets: ChartDataSets[]) => this.buildChart(datasets)));
+    this.datasets$.subscribe((datasets: ChartDataSets[]) => {
+      console.log('datasets changed');
+      if (datasets && datasets.length) {
+        if (this.chart) {
+          console.log('destroying chart');
+          this.chart.destroy();
+        }
+        this.buildChart(datasets);
+      }
+    });
   }
 
   buildChart(datasets: ChartDataSets[]) {
@@ -30,6 +40,7 @@ export class ScatterChartComponent implements OnInit {
     const newDatasets: ChartDataSets[] = datasets.map((dataset: ChartDataSets) => ({
         label: dataset.label,
         data: dataset.data,
+        backgroundColor: this.chartService.getRandomColor()
     }));
     this.chart = new Chart('myChart', {
       type: 'scatter',
@@ -40,7 +51,15 @@ export class ScatterChartComponent implements OnInit {
         scales: {
           xAxes: [{
             type: 'linear',
-            position: 'bottom'
+            position: 'bottom',
+            ticks: {
+              min: 0,
+            }
+          }],
+          yAxes: [{
+            ticks: {
+              min: 0,
+            }
           }]
         }
       }
