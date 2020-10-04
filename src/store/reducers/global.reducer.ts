@@ -31,6 +31,7 @@ const globalReducer = createReducer(
   on(fromActions.removeCity, (state, { city }) => ({ ...state, selectedCities: [city, ...state.selectedCities] })),
   on(fromActions.addUnifiedDataToStore, (state, { unifiedData }) => ({ ...state, uniformData: unifiedData })),
   on(fromActions.addChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [...state.chartDatasets, dataset] })),
+  on(fromActions.addChartDatasets, (state, { datasets }) => ({ ...state, chartDatasets: datasets })),
   on(fromActions.removeChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [dataset, ...state.chartDatasets] })),
 );
 

@@ -30,4 +30,5 @@ export const unifyData = createAction('[Global] Unify data', props<{
 }>());
 
 export const addChartDataset = createAction('[Global] Add chart dataset', props<{ dataset: ChartDataSets }>());
+export const addChartDatasets = createAction('[Global] Add chart datasets', props<{ datasets: ChartDataSets[] }>());
 export const removeChartDataset = createAction('[Global] Remove chart dataset', props<{ dataset: ChartDataSets }>());

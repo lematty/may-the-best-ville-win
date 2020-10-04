@@ -1,5 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Chart, ChartDataSets, ChartOptions } from 'chart.js';
+import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Chart, ChartData, ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
+import { Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { selectChartDatasets } from '../../store/selectors';
+import { map } from 'rxjs/operators';
+import { AppState } from '../../store/models';
 
 @Component({
   selector: 'app-scatter-chart',
@@ -8,41 +13,38 @@ import { Chart, ChartDataSets, ChartOptions } from 'chart.js';
 })
 export class ScatterChartComponent implements OnInit {
   @Input() title?: string;
-  @Input() datasets: ChartDataSets[];
+  // @Input() datasets: ChartDataSets[];
   @Input() options: ChartOptions;
+  chart: Chart;
 
-  constructor() { }
+  datasets$: Observable<ChartDataSets[]> = this.store.select(selectChartDatasets);
+  isChartBuilt = false;
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-    const ctx = document.getElementById('myChart') as HTMLCanvasElement;
-    const scatterChart = new Chart(ctx, {
-      type: 'scatter',
-      data: {
-        // datasets: [{
-        //     label: 'Scatter Dataset',
-        //     data: [{
-        //         x: -10,
-        //         y: 0
-        //     }, {
-        //         x: 0,
-        //         y: 10
-        //     }, {
-        //         x: 10,
-        //         y: 5
-        //     }]
-        // }]
-        datasets: this.datasets,
-      },
-      // options: {
-      //   scales: {
-      //     xAxes: [{
-      //       type: 'linear',
-      //       position: 'bottom'
-      //     }]
-      //   }
-      // }
-      options: this.options,
-    });
+    this.datasets$.subscribe(((datasets: ChartDataSets[]) => this.buildChart(datasets)));
   }
 
+  buildChart(datasets: ChartDataSets[]) {
+    console.log('building chart');
+    const newDatasets: ChartDataSets[] = datasets.map((dataset: ChartDataSets) => ({
+        label: dataset.label,
+        data: dataset.data,
+    }));
+    this.chart = new Chart('myChart', {
+      type: 'scatter',
+      data: {
+        datasets: newDatasets,
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            type: 'linear',
+            position: 'bottom'
+          }]
+        }
+      }
+      // options: this.options,
+    });
+  }
 }
