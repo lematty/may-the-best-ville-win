@@ -1,12 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectCountry, selectChartType, selectMetric, selectCities, selectUniformData, selectChartOptions, selectChartDatasets } from '../../store/selectors/global.selectors';
+import {
+  selectCountry,
+  selectChartType,
+  selectCities,
+  selectUniformData,
+  selectChartOptions,
+  selectChartDatasets,
+  selectXAxisMertic,
+  selectYAxisMertic
+} from '../../store/selectors/global.selectors';
 import * as fromActions from '../../store/actions';
 import { Observable } from 'rxjs';
 import { AllCitiesList, Country, UniversalMetrics, UniversalListingProperties } from '../../../models';
 import { AppState } from '../../store/models';
 import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chart-container',
@@ -16,7 +24,8 @@ import { map } from 'rxjs/operators';
 export class ChartContainerComponent implements OnInit {
   public country$: Observable<Country> = this.store.select(selectCountry);
   public selectedCities$: Observable<AllCitiesList[]> = this.store.select(selectCities);
-  public selectedMetric$: Observable<UniversalMetrics> = this.store.select(selectMetric);
+  public xAxisMertic$: Observable<UniversalMetrics> = this.store.select(selectXAxisMertic);
+  public yAxisMertic$: Observable<UniversalMetrics> = this.store.select(selectYAxisMertic);
   public unifiedData$: Observable<UniversalListingProperties[]> = this.store.select(selectUniformData);
   public chartType$: Observable<ChartType> = this.store.select(selectChartType);
   public options$: Observable<ChartOptions> = this.store.select(selectChartOptions);
@@ -25,5 +34,9 @@ export class ChartContainerComponent implements OnInit {
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+  }
+
+  getChartTitle() {
+    
   }
 }

@@ -1,69 +1,93 @@
-import { Component, OnChanges, OnInit, Input, SimpleChanges } from '@angular/core';
-import { Chart, ChartData, ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
-import { Observable } from 'rxjs';
-import { select, Store } from '@ngrx/store';
-import { selectChartDatasets } from '../../store/selectors';
-import { map } from 'rxjs/operators';
+import { Component, OnChanges, OnDestroy, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Chart, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
+import { Store } from '@ngrx/store';
 import { AppState } from '../../store/models';
 import { ChartService } from '../../services';
+import { Country } from '../../../models';
 
 @Component({
   selector: 'app-scatter-chart',
   templateUrl: './scatter-chart.component.html',
   styleUrls: ['./scatter-chart.component.less']
 })
-export class ScatterChartComponent implements OnInit {
+export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() title?: string;
-  // @Input() datasets: ChartDataSets[];
+  @Input() datasets: ChartDataSets[];
+  @Input() country: Country;
   @Input() options: ChartOptions;
-  chart: Chart;
 
-  datasets$: Observable<ChartDataSets[]> = this.store.select(selectChartDatasets);
+  chart: Chart;
 
   constructor(private store: Store<AppState>, private chartService: ChartService) { }
 
   ngOnInit(): void {
-    this.datasets$.subscribe((datasets: ChartDataSets[]) => {
-      console.log('datasets changed');
-      if (datasets && datasets.length) {
-        if (this.chart) {
-          console.log('destroying chart');
-          this.chart.destroy();
-        }
-        this.buildChart(datasets);
-      }
-    });
+    this.buildChart();
   }
 
-  buildChart(datasets: ChartDataSets[]) {
-    console.log('building chart');
-    const newDatasets: ChartDataSets[] = datasets.map((dataset: ChartDataSets) => ({
-        label: dataset.label,
-        data: dataset.data,
-        backgroundColor: this.chartService.getRandomColor()
-    }));
+  buildChart() {
     this.chart = new Chart('myChart', {
       type: 'scatter',
       data: {
-        datasets: newDatasets,
+        datasets: [],
       },
       options: {
+        tooltips: {
+          callbacks: {
+            label: ((tooltipItem: ChartTooltipItem) => {
+              return ` ${this.chartService.formatCurrency(this.country, Number(tooltipItem.xLabel))} , ` +
+                `${this.chartService.formatSurfaceArea(this.country, tooltipItem.yLabel)}`;
+            })
+          }
+        },
         scales: {
           xAxes: [{
             type: 'linear',
             position: 'bottom',
             ticks: {
-              min: 0,
+              beginAtZero: true
             }
           }],
           yAxes: [{
             ticks: {
-              min: 0,
+              beginAtZero: true
             }
           }]
         }
       }
       // options: this.options,
     });
+  }
+
+  updateDatasets() {
+    this.removeData();
+    this.addData();
+  }
+
+  addData() {
+    this.datasets.forEach((dataset: ChartDataSets) => {
+      this.chart.data.datasets.push({
+        label: dataset.label,
+        data: dataset.data,
+        backgroundColor: this.chartService.getRandomColor()
+      });
+    });
+    this.chart.update();
+    console.log(this.chart);
+}
+
+  removeData() {
+    this.chart.data.labels = [];
+    this.chart.data.datasets = [];
+    this.chart.update();
+}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.datasets && changes.datasets.currentValue && this.chart) {
+      this.updateDatasets();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.chart.destroy();
   }
 }

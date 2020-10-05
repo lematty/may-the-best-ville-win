@@ -19,13 +19,14 @@ export interface AppState {
 
 export interface GlobalState {
   selectedCountry: Country;
-  selectedMetric: UniversalMetrics;
   chartType: ChartType;
   paymentType: PaymentType;
   selectedCities: AllCitiesList[];
   uniformData: UniversalListingProperties[];
   chartDatasets: ChartDataSets[];
   chartOptions: ChartOptions;
+  xAxisMertic: UniversalMetrics;
+  yAxisMertic: UniversalMetrics;
 }
 
 export interface FranceState {

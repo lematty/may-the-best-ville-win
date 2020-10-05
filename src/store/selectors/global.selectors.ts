@@ -8,14 +8,19 @@ export const selectCountry = createSelector(
   (state: GlobalState) => state.selectedCountry
 );
 
-export const selectMetric = createSelector(
-  selectGlobalState,
-  (state: GlobalState) => state.selectedMetric
-);
-
 export const selectChartType = createSelector(
   selectGlobalState,
   (state: GlobalState) => state.chartType
+);
+
+export const selectXAxisMertic = createSelector(
+  selectGlobalState,
+  (state: GlobalState) => state.xAxisMertic
+);
+
+export const selectYAxisMertic = createSelector(
+  selectGlobalState,
+  (state: GlobalState) => state.yAxisMertic
 );
 
 export const selectPaymentType = createSelector(

@@ -5,7 +5,6 @@ import { GlobalState } from '../models';
 
 export const initialState: GlobalState = {
   selectedCountry: Country.France,
-  selectedMetric: UniversalMetrics.Price,
   chartType: 'scatter',
   paymentType: PaymentType.Buy,
   selectedCities: [],
@@ -19,6 +18,8 @@ export const initialState: GlobalState = {
       }],
     },
   },
+  xAxisMertic: UniversalMetrics.SurfaceArea,
+  yAxisMertic: UniversalMetrics.Price,
 };
 
 const globalReducer = createReducer(
@@ -27,6 +28,9 @@ const globalReducer = createReducer(
   on(fromActions.updatePaymentType, (state, { paymentType }) => ({ ...state, paymentType })),
   on(fromActions.updateSelectedMetric, (state, { selectedMetric }) => ({ ...state, selectedMetric })),
   on(fromActions.updateChartType, (state, { chartType }) => ({ ...state, chartType })),
+
+  on(fromActions.updateXAxisMetric, (state, { xAxisMetric }) => ({ ...state, xAxisMetric })),
+  on(fromActions.updateYAxisMetric, (state, { yAxisMetric }) => ({ ...state, yAxisMetric })),
 
   on(fromActions.addCity, (state, { city }) => ({ ...state, selectedCities: [...state.selectedCities, city] })),
   on(fromActions.removeCity, (state, { city }) => ({ ...state, selectedCities: [city, ...state.selectedCities] })),

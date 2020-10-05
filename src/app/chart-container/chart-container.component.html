@@ -1,5 +1,7 @@
 <app-scatter-chart
   *ngIf="(chartType$ | async) === 'scatter'"
-  [title]="country$ | async"
+  [datasets]="datasets$ | async"
+  [title]="getChartTitle()"
+  [country]="country$ | async"
   [options]="options$ | async">
 </app-scatter-chart>

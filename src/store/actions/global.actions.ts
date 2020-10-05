@@ -17,6 +17,9 @@ export const updateCountry = createAction('[Global] Update selected country', pr
 export const updateChartType = createAction('[Global] Update graph type', props<{ chartType: ChartType }>());
 export const updatePaymentType = createAction('[Global] Update payment type', props<{ paymentType: PaymentType }>());
 
+export const updateXAxisMetric = createAction('[Global] Update X axis metric', props<{ xAxisMetric: UniversalMetrics }>());
+export const updateYAxisMetric = createAction('[Global] Update Y axis metric', props<{ yAxisMetric: UniversalMetrics }>());
+
 export const addCity = createAction('[Global] Add city', props<{ city: AllCitiesList }>());
 export const removeCity = createAction('[Global] Remove city', props<{ city: AllCitiesList }>());
 

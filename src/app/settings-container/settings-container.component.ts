@@ -54,10 +54,10 @@ export class SettingsContainerComponent implements OnInit {
   }
 
   updateXAxis(metric: UniversalMetrics) {
-    // this.store.dispatch(fromActions.updateXAxisMetric({ selectedMetric: metric }));
+    this.store.dispatch(fromActions.updateXAxisMetric({ xAxisMetric: metric }));
   }
 
   updateYAxis(metric: UniversalMetrics) {
-    // this.store.dispatch(fromActions.updateYAxisMetric({ selectedMetric: metric }));
+    this.store.dispatch(fromActions.updateYAxisMetric({ yAxisMetric: metric }));
   }
 }

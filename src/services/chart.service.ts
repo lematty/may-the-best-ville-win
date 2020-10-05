@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ChartType, ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
-import { AllCitiesList, UniversalListingProperties } from '../../models';
+import { AllCitiesList, Country, UniversalListingProperties } from '../../models';
 
 @Injectable({
   providedIn: 'root'
@@ -52,13 +52,8 @@ export class ChartService {
   }
 
   getRandomColor(): string {
-    // const letters = '0123456789ABCDEF';
-    // let color = '#';
-    // for (let i = 0; i < 6; i++) {
-    //   color += letters[Math.floor(Math.random() * 16)];
-    // }
-    // return color;
-    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    const maxHexCombos = 16777215;
+    const randomColor = '#' + Math.floor(Math.random() * maxHexCombos).toString(16);
     return randomColor;
   }
 
@@ -68,6 +63,9 @@ export class ChartService {
         xAxes: [{
           type: 'linear',
           position: 'bottom',
+          ticks: {
+            min: 0,
+          },
         }],
         yAxes: [{
           ticks: {
@@ -80,6 +78,18 @@ export class ChartService {
 
   formatBarChart(): any {
     return;
+  }
+
+  formatCurrency(country: Country, value: number) {
+    const usFormat = (new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }));
+    const franceFormat = (new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }));
+    const formatType = country === Country.France ? franceFormat : usFormat;
+    return formatType.format(value);
+  }
+
+  formatSurfaceArea(country: Country, value: number | string) {
+    const format = country === Country.France ? 'm2' : 'sqft';
+    return `${value} ${format}`;
   }
 
 }
