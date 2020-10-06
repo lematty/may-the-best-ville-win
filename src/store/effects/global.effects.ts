@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { EMPTY } from 'rxjs';
 import * as fromGlobalActions from '../actions/global.actions';
 import * as fromFranceActions from '../actions/france.actions';
 import * as fromUsActions from '../actions/us.actions';
-import { mergeMap, map, catchError, withLatestFrom, concatMap, switchMap } from 'rxjs/operators';
-import { selectChartType, selectCountry, selectPaymentType } from '../selectors';
+import { mergeMap, withLatestFrom, switchMap } from 'rxjs/operators';
+import { selectCountry, selectPaymentType } from '../selectors';
 import { AppState } from '../models';
-import { ChartService, GlobalService } from '../../services';
+import { GlobalService } from '../../services';
 import {
   Country,
   FranceBuyListingJsonFormat,
@@ -23,21 +22,12 @@ import {
 export class GlobalEffects {
   unifyData$ = createEffect(() => this.actions$.pipe(
     ofType(fromGlobalActions.unifyData),
-    map((action) => {
+    switchMap((action) => {
       const unifiedData = this.globalService.unifyData(action.country, action.data);
-      return fromGlobalActions.addUnifiedDataToStore({ unifiedData });
-    })
-  ));
-
-  formatUnifiedDataForChart$ = createEffect(() => this.actions$.pipe(
-    ofType(fromGlobalActions.addUnifiedDataToStore),
-    withLatestFrom(
-      this.store.select(selectChartType),
-      this.store.select(selectPaymentType),
-    ),
-    map(([action, chartType, paymentType]) => {
-      const chartData = this.chartService.createChartData(chartType, action.unifiedData);
-      return fromGlobalActions.addChartDatasets({ datasets: chartData.datasets });
+      return [
+        fromGlobalActions.addUnifiedDataToStore({ unifiedData }),
+        fromGlobalActions.updateChartDatasets({ datasets: unifiedData })
+      ];
     })
   ));
 
@@ -52,7 +42,6 @@ export class GlobalEffects {
       this.store.select(selectPaymentType),
     ),
     mergeMap(([, country, paymentType]) => {
-      console.log('fetchRawDataFromJson$', country, paymentType);
       return this.globalService.fetchRawDataFromJson(country, paymentType).pipe(
         switchMap((rawData) => {
           const addRawDataToStoreAction = this.chooseAction(country, paymentType, rawData);
@@ -83,7 +72,6 @@ export class GlobalEffects {
   constructor(
     private actions$: Actions,
     private globalService: GlobalService,
-    private chartService: ChartService,
     private store: Store<AppState>,
   ) {}
 }

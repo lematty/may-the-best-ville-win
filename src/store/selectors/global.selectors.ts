@@ -1,4 +1,5 @@
 import { createSelector } from '@ngrx/store';
+import { Country, PaymentType } from '../../../models';
 import { AppState, GlobalState } from '../models';
 
 export const selectGlobalState = (state: AppState) => state.globalState;
@@ -13,14 +14,14 @@ export const selectChartType = createSelector(
   (state: GlobalState) => state.chartType
 );
 
-export const selectXAxisMertic = createSelector(
+export const selectXAxisMetric = createSelector(
   selectGlobalState,
-  (state: GlobalState) => state.xAxisMertic
+  (state: GlobalState) => state.xAxisMetric
 );
 
-export const selectYAxisMertic = createSelector(
+export const selectYAxisMetric = createSelector(
   selectGlobalState,
-  (state: GlobalState) => state.yAxisMertic
+  (state: GlobalState) => state.yAxisMetric
 );
 
 export const selectPaymentType = createSelector(
@@ -46,4 +47,10 @@ export const selectChartDatasets = createSelector(
 export const selectChartOptions = createSelector(
   selectGlobalState,
   (state: GlobalState) => state.chartOptions
+);
+
+export const selectChartTitle = createSelector(
+  selectCountry,
+  selectPaymentType,
+  (country: Country, paymentType: PaymentType) => `${country.toUpperCase()} - ${paymentType.toUpperCase()}`
 );

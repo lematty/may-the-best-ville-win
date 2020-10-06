@@ -25,8 +25,8 @@ export interface GlobalState {
   uniformData: UniversalListingProperties[];
   chartDatasets: ChartDataSets[];
   chartOptions: ChartOptions;
-  xAxisMertic: UniversalMetrics;
-  yAxisMertic: UniversalMetrics;
+  xAxisMetric: UniversalMetrics;
+  yAxisMetric: UniversalMetrics;
 }
 
 export interface FranceState {

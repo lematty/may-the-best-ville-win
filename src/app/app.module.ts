@@ -13,6 +13,7 @@ import { environment } from '../environments/environment';
 import { ChartContainerComponent } from './chart-container/chart-container.component';
 import { SettingsContainerComponent } from './settings-container/settings-container.component';
 import { EffectsModule } from '@ngrx/effects';
+import { ChartEffects } from '../store/effects/chart.effects';
 import { FranceEffects } from '../store/effects/france.effects';
 import { GlobalEffects } from '../store/effects/global.effects';
 import { ScatterChartComponent } from './scatter-chart/scatter-chart.component';
@@ -33,7 +34,7 @@ import { ScatterChartComponent } from './scatter-chart/scatter-chart.component';
       usState: fromUSActions.reducer
     }, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([FranceEffects, GlobalEffects]),
+    EffectsModule.forRoot([ChartEffects, FranceEffects, GlobalEffects]),
     HttpClientModule,
   ],
   providers: [],

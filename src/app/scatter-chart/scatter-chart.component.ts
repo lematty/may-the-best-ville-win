@@ -11,7 +11,7 @@ import { Country } from '../../../models';
   styleUrls: ['./scatter-chart.component.less']
 })
 export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() title?: string;
+  @Input() title: string;
   @Input() datasets: ChartDataSets[];
   @Input() country: Country;
   @Input() options: ChartOptions;
@@ -31,10 +31,14 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
         datasets: [],
       },
       options: {
+        title: {
+          display: true,
+          text: this.title || ''
+        },
         tooltips: {
           callbacks: {
             label: ((tooltipItem: ChartTooltipItem) => {
-              return ` ${this.chartService.formatCurrency(this.country, Number(tooltipItem.xLabel))} , ` +
+              return ` ${this.chartService.formatCurrency(this.country, Number(tooltipItem.xLabel))} - ` +
                 `${this.chartService.formatSurfaceArea(this.country, tooltipItem.yLabel)}`;
             })
           }
@@ -59,7 +63,7 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateDatasets() {
-    this.removeData();
+    this.chartService.removeData(this.chart);
     this.addData();
   }
 
@@ -73,17 +77,14 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.chart.update();
     console.log(this.chart);
-}
-
-  removeData() {
-    this.chart.data.labels = [];
-    this.chart.data.datasets = [];
-    this.chart.update();
-}
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.datasets && changes.datasets.currentValue && this.chart) {
       this.updateDatasets();
+    }
+    if (changes.title && changes.title.currentValue && this.chart) {
+      this.chartService.updateTitle(this.chart, this.title);
     }
   }
 

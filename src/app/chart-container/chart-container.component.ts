@@ -7,12 +7,11 @@ import {
   selectUniformData,
   selectChartOptions,
   selectChartDatasets,
-  selectXAxisMertic,
-  selectYAxisMertic
+  selectXAxisMetric,
+  selectYAxisMetric, selectPaymentType, selectChartTitle
 } from '../../store/selectors/global.selectors';
-import * as fromActions from '../../store/actions';
 import { Observable } from 'rxjs';
-import { AllCitiesList, Country, UniversalMetrics, UniversalListingProperties } from '../../../models';
+import { AllCitiesList, Country, UniversalMetrics, UniversalListingProperties, PaymentType } from '../../../models';
 import { AppState } from '../../store/models';
 import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
 
@@ -24,19 +23,17 @@ import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
 export class ChartContainerComponent implements OnInit {
   public country$: Observable<Country> = this.store.select(selectCountry);
   public selectedCities$: Observable<AllCitiesList[]> = this.store.select(selectCities);
-  public xAxisMertic$: Observable<UniversalMetrics> = this.store.select(selectXAxisMertic);
-  public yAxisMertic$: Observable<UniversalMetrics> = this.store.select(selectYAxisMertic);
+  public xAxisMetric$: Observable<UniversalMetrics> = this.store.select(selectXAxisMetric);
+  public yAxisMetric$: Observable<UniversalMetrics> = this.store.select(selectYAxisMetric);
   public unifiedData$: Observable<UniversalListingProperties[]> = this.store.select(selectUniformData);
   public chartType$: Observable<ChartType> = this.store.select(selectChartType);
+  public paymentType$: Observable<PaymentType> = this.store.select(selectPaymentType);
   public options$: Observable<ChartOptions> = this.store.select(selectChartOptions);
   public datasets$: Observable<ChartDataSets[]> = this.store.select(selectChartDatasets);
+  public chartTitle$: Observable<string> = this.store.select(selectChartTitle);
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
-  }
-
-  getChartTitle() {
-    
   }
 }

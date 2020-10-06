@@ -10,23 +10,15 @@ export const initialState: GlobalState = {
   selectedCities: [],
   uniformData: [],
   chartDatasets: [],
-  chartOptions: {
-    scales: {
-      xAxes: [{
-        type: 'linear',
-        position: 'bottom',
-      }],
-    },
-  },
-  xAxisMertic: UniversalMetrics.SurfaceArea,
-  yAxisMertic: UniversalMetrics.Price,
+  chartOptions: {},
+  xAxisMetric: UniversalMetrics.Price,
+  yAxisMetric: UniversalMetrics.SurfaceArea,
 };
 
 const globalReducer = createReducer(
   initialState,
   on(fromActions.updateCountry, (state, { country }) => ({ ...state, selectedCountry: country })),
   on(fromActions.updatePaymentType, (state, { paymentType }) => ({ ...state, paymentType })),
-  on(fromActions.updateSelectedMetric, (state, { selectedMetric }) => ({ ...state, selectedMetric })),
   on(fromActions.updateChartType, (state, { chartType }) => ({ ...state, chartType })),
 
   on(fromActions.updateXAxisMetric, (state, { xAxisMetric }) => ({ ...state, xAxisMetric })),

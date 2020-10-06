@@ -21,14 +21,12 @@ export class GlobalService {
   ) { }
 
   fetchRawDataFromJson(country: Country, paymentType: PaymentType): Observable<UniversalListingJsonFormat[]> {
-    console.log('fetchingRawData');
     return country === Country.France
       ? this.franceService.getFranceData(paymentType)
       : this.usService.getUsData(paymentType);
   }
 
   unifyData(country: Country, data: FranceUniversalListingJsonFormat[]): UniversalListingProperties[] {
-    console.log('unifyData', data);
     return country === Country.France
       ? this.franceService.unifyFranceData(data)
       : this.usService.unifyUsData(data);

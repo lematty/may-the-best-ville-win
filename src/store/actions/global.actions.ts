@@ -12,7 +12,6 @@ import {
 
 export const initialSetup = createAction('[Global] Initial setup');
 
-export const updateSelectedMetric = createAction('[Global] Update selected metric', props<{ selectedMetric: UniversalMetrics }>());
 export const updateCountry = createAction('[Global] Update selected country', props<{ country: Country }>());
 export const updateChartType = createAction('[Global] Update graph type', props<{ chartType: ChartType }>());
 export const updatePaymentType = createAction('[Global] Update payment type', props<{ paymentType: PaymentType }>());
@@ -35,3 +34,5 @@ export const unifyData = createAction('[Global] Unify data', props<{
 export const addChartDataset = createAction('[Global] Add chart dataset', props<{ dataset: ChartDataSets }>());
 export const addChartDatasets = createAction('[Global] Add chart datasets', props<{ datasets: ChartDataSets[] }>());
 export const removeChartDataset = createAction('[Global] Remove chart dataset', props<{ dataset: ChartDataSets }>());
+
+export const updateChartDatasets = createAction('[Global] update chart datasets', props<{ datasets: UniversalListingProperties[] }>());
