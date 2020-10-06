@@ -28,8 +28,8 @@ export class ChartEffects {
       this.store.select(selectYAxisMetric),
     ),
     map(([action, chartType, xAxis, yAxis]) => {
-      const chartData = this.chartService.createChartData(chartType, action.datasets, xAxis, yAxis);
-      return fromGlobalActions.addChartDatasets({ datasets: chartData.datasets });
+      const { datasets, options } = this.chartService.createChartData(chartType, action.datasets, xAxis, yAxis);
+      return fromGlobalActions.addChartDatasets({ datasets });
     })
   ));
 

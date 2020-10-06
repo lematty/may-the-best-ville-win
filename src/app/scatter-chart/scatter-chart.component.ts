@@ -3,7 +3,7 @@ import { Chart, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/models';
 import { ChartService } from '../../services';
-import { Country } from '../../../models';
+import { Country, UniversalMetrics } from '../../../models';
 
 @Component({
   selector: 'app-scatter-chart',
@@ -13,6 +13,8 @@ import { Country } from '../../../models';
 export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
   @Input() title: string;
   @Input() datasets: ChartDataSets[];
+  @Input() xAxisMetric: UniversalMetrics;
+  @Input() yAxisMetric: UniversalMetrics;
   @Input() country: Country;
   @Input() options: ChartOptions;
 
@@ -38,8 +40,9 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
         tooltips: {
           callbacks: {
             label: ((tooltipItem: ChartTooltipItem) => {
-              return ` ${this.chartService.formatCurrency(this.country, Number(tooltipItem.xLabel))} - ` +
-                `${this.chartService.formatSurfaceArea(this.country, tooltipItem.yLabel)}`;
+              const xAxis = this.chartService.formatTooltip(this.country, this.xAxisMetric, tooltipItem.xLabel);
+              const yAxis = this.chartService.formatTooltip(this.country, this.yAxisMetric, tooltipItem.yLabel);
+              return ` ${xAxis} - ${yAxis}`;
             })
           }
         },

@@ -18,21 +18,21 @@ export class ChartService {
   ): { datasets: ChartDataSets[], options?: ChartOptions } {
     switch (chartType) {
       case 'bar':
-        return this.formatBarChart();
+        return this.formatScatterChart(data, xAxis, yAxis);
       case 'bubble':
-        return this.formatBarChart();
+        return this.formatScatterChart(data, xAxis, yAxis);
       case 'doughnut':
-        return this.formatBarChart();
+        return this.formatScatterChart(data, xAxis, yAxis);
       case 'horizontalBar':
-        return this.formatBarChart();
+        return this.formatScatterChart(data, xAxis, yAxis);
       case 'line':
-        return this.formatBarChart();
+        return this.formatScatterChart(data, xAxis, yAxis);
       case 'pie':
-        return this.formatBarChart();
+        return this.formatScatterChart(data, xAxis, yAxis);
       case 'polarArea':
-        return this.formatBarChart();
+        return this.formatScatterChart(data, xAxis, yAxis);
       case 'radar':
-        return this.formatBarChart();
+        return this.formatScatterChart(data, xAxis, yAxis);
       case 'scatter':
         return this.formatScatterChart(data, xAxis, yAxis);
 
@@ -87,19 +87,36 @@ export class ChartService {
     };
   }
 
-  formatBarChart(): any {
-    return;
+  formatTooltip(country: Country, type: UniversalMetrics, axis: string | number): string {
+    switch (type) {
+      case UniversalMetrics.Price:
+        return this.formatCurrency(country, Number(axis));
+      case UniversalMetrics.SurfaceArea:
+        return this.formatSurfaceArea(country, Number(axis));
+      case UniversalMetrics.NumberOfBedrooms:
+        return this.formatRooms(axis, true);
+      case UniversalMetrics.NumberOfRooms:
+        return this.formatRooms(axis, false);
+      default:
+        console.log('INSIDE DEFAULT');
+        return `${axis}`;
+    }
   }
 
-  formatCurrency(country: Country, value: number) {
+  formatCurrency(country: Country, value: number): string {
     const usFormat = (new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }));
     const franceFormat = (new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }));
     const formatType = country === Country.France ? franceFormat : usFormat;
-    return formatType.format(value);
+    return formatType.format(value) as string;
   }
 
-  formatSurfaceArea(country: Country, value: number | string) {
+  formatSurfaceArea(country: Country, value: number | string): string {
     const format = country === Country.France ? 'm2' : 'sqft';
+    return `${value} ${format}`;
+  }
+
+  formatRooms(value: number | string, isBedrooms: boolean): string {
+    const format = isBedrooms ? 'bedrooms' : 'rooms';
     return `${value} ${format}`;
   }
 
