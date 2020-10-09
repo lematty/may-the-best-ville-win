@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { Country, PaymentType, UniversalMetrics } from '../../../models';
+import { UniversalMetrics } from '../../../models';
 import { AppState, GlobalState } from '../models';
 
 export const selectGlobalState = (state: AppState) => state.globalState;
@@ -32,33 +32,32 @@ export const selectAxesMetrics = createSelector(
   }
 );
 
-export const selectPaymentType = createSelector(
-  selectGlobalState,
-  (state: GlobalState) => state.paymentType
-);
-
 export const selectCities = createSelector(
   selectGlobalState,
   (state: GlobalState) => state.selectedCities
 );
 
-export const selectUniformData = createSelector(
+export const selectUniformBuyData = createSelector(
   selectGlobalState,
-  (state: GlobalState) => state.uniformData
+  (state: GlobalState) => state.uniformBuyData
 );
 
-export const selectChartDatasets = createSelector(
+export const selectUniformRentData = createSelector(
   selectGlobalState,
-  (state: GlobalState) => state.chartDatasets
+  (state: GlobalState) => state.uniformBuyData
+);
+
+export const selectBuyChartDatasets = createSelector(
+  selectGlobalState,
+  (state: GlobalState) => state.buyChartDatasets
+);
+
+export const selectRentChartDatasets = createSelector(
+  selectGlobalState,
+  (state: GlobalState) => state.rentChartDatasets
 );
 
 export const selectChartOptions = createSelector(
   selectGlobalState,
   (state: GlobalState) => state.chartOptions
-);
-
-export const selectChartTitle = createSelector(
-  selectCountry,
-  selectPaymentType,
-  (country: Country, paymentType: PaymentType) => `${country.toUpperCase()} - ${paymentType.toUpperCase()}`
 );

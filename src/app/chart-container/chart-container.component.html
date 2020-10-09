@@ -3,16 +3,15 @@
     <app-scatter-chart
       *ngIf="
         ((chartType$ | async) === 'scatter')
-        && (datasets$ | async)
+        && (buyDatasets$ | async)
         && (axesMetrics$ | async)?.xAxisMetric
         && (axesMetrics$ | async)?.yAxisMetric
-        && (chartTitle$ | async)
         && (country$ | async)
         && (options$ | async)"
-      [datasets]="datasets$ | async"
+      [datasets]="buyDatasets$ | async"
       [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
       [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
-      [title]="chartTitle$ | async"
+      [title]="'Buy'"
       [country]="country$ | async"
       [options]="options$ | async">
     </app-scatter-chart>
@@ -21,16 +20,15 @@
     <app-scatter-chart
       *ngIf="
         ((chartType$ | async) === 'scatter')
-        && (datasets$ | async)
+        && (rentDatasets$ | async)
         && (axesMetrics$ | async)?.xAxisMetric
         && (axesMetrics$ | async)?.yAxisMetric
-        && (chartTitle$ | async)
         && (country$ | async)
         && (options$ | async)"
-      [datasets]="datasets$ | async"
+      [datasets]="rentDatasets$ | async"
       [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
       [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
-      [title]="chartTitle$ | async"
+      [title]="'Rent'"
       [country]="country$ | async"
       [options]="options$ | async">
     </app-scatter-chart>

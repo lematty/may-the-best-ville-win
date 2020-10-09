@@ -5,7 +5,7 @@ import * as fromGlobalActions from '../actions/global.actions';
 import * as fromFranceActions from '../actions/france.actions';
 import * as fromUsActions from '../actions/us.actions';
 import { mergeMap, withLatestFrom, switchMap } from 'rxjs/operators';
-import { selectCountry, selectPaymentType } from '../selectors';
+import { selectCountry } from '../selectors';
 import { AppState } from '../models';
 import { GlobalService } from '../../services';
 import {
@@ -23,10 +23,11 @@ export class GlobalEffects {
   unifyData$ = createEffect(() => this.actions$.pipe(
     ofType(fromGlobalActions.unifyData),
     switchMap((action) => {
-      const unifiedData = this.globalService.unifyData(action.country, action.data);
+      const unifiedBuyData = this.globalService.unifyData(action.country, action.buyData);
+      const unifiedRentData = this.globalService.unifyData(action.country, action.rentData);
       return [
-        fromGlobalActions.addUnifiedDataToStore({ unifiedData }),
-        fromGlobalActions.updateChartDatasets({ datasets: unifiedData })
+        fromGlobalActions.updateChartDatasets({ buyData: unifiedBuyData, rentData: unifiedRentData }),
+        fromGlobalActions.addUnifiedDataToStore({ unifiedBuyData, unifiedRentData })
       ];
     })
   ));
@@ -35,37 +36,34 @@ export class GlobalEffects {
     ofType(
       fromGlobalActions.initialSetup,
       fromGlobalActions.updateCountry,
-      fromGlobalActions.updatePaymentType,
     ),
-    withLatestFrom(
-      this.store.select(selectCountry),
-      this.store.select(selectPaymentType),
-    ),
-    mergeMap(([, country, paymentType]) => {
-      return this.globalService.fetchRawDataFromJson(country, paymentType).pipe(
-        switchMap((rawData) => {
-          const addRawDataToStoreAction = this.chooseAction(country, paymentType, rawData);
+    withLatestFrom(this.store.select(selectCountry)),
+    mergeMap(([, country]) => {
+      return this.globalService.fetchRawDataFromJson(country).pipe(
+        switchMap(([buyData, rentData]) => {
+          const addRawDataToStoreActions = this.chooseActions(country, buyData, rentData);
           return [
-            fromGlobalActions.unifyData({ country, paymentType, data: rawData }),
-            addRawDataToStoreAction
+            fromGlobalActions.unifyData({ country, paymentType: PaymentType.Buy, buyData, rentData }),
+            addRawDataToStoreActions.buyAction,
+            addRawDataToStoreActions.rentAction,
           ];
         })
       );
     })
   ));
 
-  chooseAction(country: Country, paymentType: PaymentType, data: UniversalListingJsonFormat[]) {
-    if (country === Country.France && paymentType === PaymentType.Buy) {
-      return fromFranceActions.addFranceBuyData({ data: data as FranceBuyListingJsonFormat[] });
+  chooseActions(country: Country, buyData: UniversalListingJsonFormat[], rentData: UniversalListingJsonFormat[]) {
+    if (country === Country.France) {
+      return {
+        buyAction: fromFranceActions.addFranceBuyData({ data: buyData as FranceBuyListingJsonFormat[] }),
+        rentAction: fromFranceActions.addFranceRentData({ data: rentData as FranceRentListingJsonFormat[] }),
+      };
     }
-    if (country === Country.France && paymentType === PaymentType.Rent) {
-      return fromFranceActions.addFranceRentData({ data: data as FranceRentListingJsonFormat[] });
-    }
-    if (country === Country.Us && paymentType === PaymentType.Buy) {
-      return fromUsActions.addUsBuyData({ data: data as UsBuyListingJsonFormat[] });
-    }
-    if (country === Country.Us && paymentType === PaymentType.Rent) {
-      return fromUsActions.addUsRentData({ data: data as UsRentListingJsonFormat[] });
+    if (country === Country.Us) {
+      return {
+        buyAction: fromUsActions.addUsBuyData({ data: buyData as UsBuyListingJsonFormat[] }),
+        rentAction: fromUsActions.addUsRentData({ data: rentData as UsRentListingJsonFormat[] }),
+      };
     }
   }
 

@@ -9,8 +9,6 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const ASSETS_PATH = '../assets';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,7 +28,7 @@ export class UsService {
     return;
   }
 
-  getUsData(paymentType: PaymentType): Observable<UsUniversalListingJsonFormat[]> {
+  getUsData(): Observable<[UsUniversalListingJsonFormat[], UsUniversalListingJsonFormat[]]> {
     return;
   }
 }

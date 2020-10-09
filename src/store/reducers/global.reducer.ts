@@ -6,10 +6,11 @@ import { GlobalState } from '../models';
 export const initialState: GlobalState = {
   selectedCountry: Country.France,
   chartType: 'scatter',
-  paymentType: PaymentType.Buy,
   selectedCities: [],
-  uniformData: [],
-  chartDatasets: [],
+  uniformBuyData: [],
+  uniformRentData: [],
+  buyChartDatasets: [],
+  rentChartDatasets: [],
   chartOptions: {},
   xAxisMetric: UniversalMetrics.Price,
   yAxisMetric: UniversalMetrics.SurfaceArea,
@@ -18,7 +19,6 @@ export const initialState: GlobalState = {
 const globalReducer = createReducer(
   initialState,
   on(fromActions.updateCountry, (state, { country }) => ({ ...state, selectedCountry: country })),
-  on(fromActions.updatePaymentType, (state, { paymentType }) => ({ ...state, paymentType })),
   on(fromActions.updateChartType, (state, { chartType }) => ({ ...state, chartType })),
 
   on(fromActions.updateXAxisMetric, (state, { xAxisMetric }) => ({ ...state, xAxisMetric })),
@@ -26,10 +26,18 @@ const globalReducer = createReducer(
 
   on(fromActions.addCity, (state, { city }) => ({ ...state, selectedCities: [...state.selectedCities, city] })),
   on(fromActions.removeCity, (state, { city }) => ({ ...state, selectedCities: [city, ...state.selectedCities] })),
-  on(fromActions.addUnifiedDataToStore, (state, { unifiedData }) => ({ ...state, uniformData: unifiedData })),
-  on(fromActions.addChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [...state.chartDatasets, dataset] })),
-  on(fromActions.addChartDatasets, (state, { datasets }) => ({ ...state, chartDatasets: datasets })),
-  on(fromActions.removeChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [dataset, ...state.chartDatasets] })),
+  
+  on(fromActions.addUnifiedDataToStore, (state, { unifiedBuyData, unifiedRentData }) => ({ ...state, unifiedBuyData, unifiedRentData })),
+
+  on(fromActions.addBuyChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [...state.buyChartDatasets, dataset] })),
+  on(fromActions.addRentChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [...state.rentChartDatasets, dataset] })),
+
+  on(fromActions.addBuyChartDatasets, (state, { datasets }) => ({ ...state, buyChartDatasets: datasets })),
+  on(fromActions.addRentChartDatasets, (state, { datasets }) => ({ ...state, rentChartDatasets: datasets })),
+  on(fromActions.addChartDatasets, (state, { buyChart, rentChart }) => ({ ...state, buyChartDatasets: buyChart, rentChartDatasets: rentChart })),
+
+  on(fromActions.removeBuyChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [dataset, ...state.buyChartDatasets] })),
+  on(fromActions.removeRentChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [dataset, ...state.rentChartDatasets] })),
 );
 
 export function reducer(state: GlobalState | undefined, action: Action) {

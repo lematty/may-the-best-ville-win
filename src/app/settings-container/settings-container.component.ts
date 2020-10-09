@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AllCitiesList, Country, PaymentType, UniversalMetrics } from '../../../models';
+import { AllCitiesList, Country, UniversalMetrics } from '../../../models';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/models';
 import * as fromActions from '../../store/actions';
@@ -14,7 +14,6 @@ import { selectAxesMetrics, selectChartType } from '../../store/selectors';
 })
 export class SettingsContainerComponent implements OnInit {
   public chartTypes: ChartType[] = ['bar', 'bubble', 'doughnut', 'horizontalBar', 'line', 'pie', 'polarArea', 'radar', 'scatter'];
-  public paymentTypes = [PaymentType.Buy, PaymentType.Rent];
   public countries = [Country.France, Country.Us];
   public axisOptions = [
     UniversalMetrics.City,
@@ -53,10 +52,6 @@ export class SettingsContainerComponent implements OnInit {
 
   updateCountry(country: Country) {
     this.store.dispatch(fromActions.updateCountry({ country }));
-  }
-
-  updatePaymentType(paymentType: PaymentType) {
-    this.store.dispatch(fromActions.updatePaymentType({ paymentType }));
   }
 
   addCity(city: AllCitiesList) {

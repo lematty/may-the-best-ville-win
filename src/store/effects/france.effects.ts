@@ -7,7 +7,7 @@ import * as fromFranceActions from '../actions/france.actions';
 import * as fromGlobalActions from '../actions/global.actions';
 import { mergeMap, map, catchError, withLatestFrom } from 'rxjs/operators';
 import { Country, FranceBuyListingJsonFormat, UniversalListingProperties } from '../../../models';
-import { selectFranceBuyJsonData, selectPaymentType, selectUsBuyJsonData } from '../selectors';
+import { selectFranceBuyJsonData, selectUsBuyJsonData } from '../selectors';
 import { AppState } from '../models';
 import { selectCountry } from '../selectors/global.selectors';
 

@@ -2,24 +2,21 @@ import { Injectable } from '@angular/core';
 import {
   Country,
   FranceUniversalListingJsonFormat,
-  PaymentType,
   UniversalListingProperties,
 } from '../../models';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-const DATA_PATH = '../assets/data';
+import { DataService } from './data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FranceService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private dataService: DataService) { }
 
-  getFranceData(paymentType: PaymentType): Observable<FranceUniversalListingJsonFormat[]> {
-    const url = `${DATA_PATH}/output/${Country.France}-${paymentType}-output.json`;
-    return this.http.get<FranceUniversalListingJsonFormat[]>(url);
+  getFranceData(): Observable<[FranceUniversalListingJsonFormat[], FranceUniversalListingJsonFormat[]]> {
+    return this.dataService.getData(Country.France);
   }
 
   unifyFranceData(listings: FranceUniversalListingJsonFormat[]): UniversalListingProperties[] {

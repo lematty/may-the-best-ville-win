@@ -26,6 +26,7 @@ export class ScatterChartComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   buildChart() {
+    console.log(this.datasets);
     const context = this.chartElementRef.nativeElement;
     this.chart = new Chart(context, {
       type: 'scatter',

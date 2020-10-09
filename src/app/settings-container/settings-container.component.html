@@ -18,15 +18,6 @@
 <br>
 
 <div>
-  <div>Payment Type</div>
-  <select (change)="updatePaymentType($event.target.value)">
-    <option *ngFor="let payment of paymentTypes" value="{{ payment }}">{{ payment }}</option>
-  </select>
-</div>
-
-<br>
-
-<div>
   <div>X Axis</div>
   <select [(ngModel)]="selectedXMetric" (change)="updateXAxis($event.target.value)">
     <option *ngFor="let option of axisOptions" value="{{ option }}">{{ option }}</option>

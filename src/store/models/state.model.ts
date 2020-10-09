@@ -4,7 +4,6 @@ import {
   Country,
   FranceBuyListingJsonFormat,
   FranceRentListingJsonFormat,
-  PaymentType,
   UniversalListingProperties,
   UniversalMetrics,
   UsBuyListingJsonFormat,
@@ -20,10 +19,11 @@ export interface AppState {
 export interface GlobalState {
   selectedCountry: Country;
   chartType: ChartType;
-  paymentType: PaymentType;
   selectedCities: AllCitiesList[];
-  uniformData: UniversalListingProperties[];
-  chartDatasets: ChartDataSets[];
+  uniformBuyData: UniversalListingProperties[];
+  uniformRentData: UniversalListingProperties[];
+  buyChartDatasets: ChartDataSets[];
+  rentChartDatasets: ChartDataSets[];
   chartOptions: ChartOptions;
   xAxisMetric: UniversalMetrics;
   yAxisMetric: UniversalMetrics;

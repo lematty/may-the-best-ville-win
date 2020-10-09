@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
   Country,
   FranceUniversalListingJsonFormat,
-  PaymentType,
   UniversalListingJsonFormat,
   UniversalListingProperties,
 } from '../../models';
@@ -20,10 +19,10 @@ export class GlobalService {
     private usService: UsService,
   ) { }
 
-  fetchRawDataFromJson(country: Country, paymentType: PaymentType): Observable<UniversalListingJsonFormat[]> {
+  fetchRawDataFromJson(country: Country): Observable<[UniversalListingJsonFormat[], UniversalListingJsonFormat[]]> {
     return country === Country.France
-      ? this.franceService.getFranceData(paymentType)
-      : this.usService.getUsData(paymentType);
+      ? this.franceService.getFranceData()
+      : this.usService.getUsData();
   }
 
   unifyData(country: Country, data: FranceUniversalListingJsonFormat[]): UniversalListingProperties[] {
