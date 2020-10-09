@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { Country, PaymentType } from '../../../models';
+import { Country, PaymentType, UniversalMetrics } from '../../../models';
 import { AppState, GlobalState } from '../models';
 
 export const selectGlobalState = (state: AppState) => state.globalState;
@@ -22,6 +22,14 @@ export const selectXAxisMetric = createSelector(
 export const selectYAxisMetric = createSelector(
   selectGlobalState,
   (state: GlobalState) => state.yAxisMetric
+);
+
+export const selectAxesMetrics = createSelector(
+  selectXAxisMetric,
+  selectYAxisMetric,
+  (xAxisMetric: UniversalMetrics, yAxisMetric: UniversalMetrics) => {
+    return { xAxisMetric, yAxisMetric };
+  }
 );
 
 export const selectPaymentType = createSelector(

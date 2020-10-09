@@ -1,30 +1,43 @@
+<br>
 <div>
   <div>Chart Type</div>
-  <select (change)="updateChartType($event.target.value)">
+  <select [(ngModel)]="selectedChartType" (change)="updateChartType($event.target.value)">
     <option *ngFor="let type of chartTypes" value="{{ type }}">{{ type }}</option>
   </select>
 </div>
+
+<br>
+
 <div>
   <div>Country</div>
   <select (change)="updateCountry($event.target.value)" disabled>
     <option *ngFor="let country of countries" value="{{ country }}">{{ country }}</option>
   </select>
 </div>
+
+<br>
+
 <div>
   <div>Payment Type</div>
   <select (change)="updatePaymentType($event.target.value)">
     <option *ngFor="let payment of paymentTypes" value="{{ payment }}">{{ payment }}</option>
   </select>
 </div>
+
+<br>
+
 <div>
   <div>X Axis</div>
-  <select (change)="updateXAxis($event.target.value)">
+  <select [(ngModel)]="selectedXMetric" (change)="updateXAxis($event.target.value)">
     <option *ngFor="let option of axisOptions" value="{{ option }}">{{ option }}</option>
   </select>
 </div>
+
+<br>
+
 <div>
   <div>Y Axis</div>
-  <select (change)="updateYAxis($event.target.value)">
+  <select [(ngModel)]="selectedYMetric" (change)="updateYAxis($event.target.value)">
     <option *ngFor="let option of axisOptions" value="{{ option }}">{{ option }}</option>
   </select>
 </div>

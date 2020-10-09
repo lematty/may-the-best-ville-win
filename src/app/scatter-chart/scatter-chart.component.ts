@@ -1,7 +1,5 @@
-import { Component, OnChanges, OnDestroy, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, OnDestroy, Input, SimpleChanges, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Chart, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/models';
 import { ChartService } from '../../services';
 import { Country, UniversalMetrics } from '../../../models';
 
@@ -10,24 +8,26 @@ import { Country, UniversalMetrics } from '../../../models';
   templateUrl: './scatter-chart.component.html',
   styleUrls: ['./scatter-chart.component.less']
 })
-export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
+export class ScatterChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() title: string;
   @Input() datasets: ChartDataSets[];
   @Input() xAxisMetric: UniversalMetrics;
   @Input() yAxisMetric: UniversalMetrics;
   @Input() country: Country;
   @Input() options: ChartOptions;
+  @ViewChild('chart') chartElementRef: ElementRef;
 
   chart: Chart;
 
-  constructor(private store: Store<AppState>, private chartService: ChartService) { }
+  constructor(private chartService: ChartService) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.buildChart();
   }
 
   buildChart() {
-    this.chart = new Chart('myChart', {
+    const context = this.chartElementRef.nativeElement;
+    this.chart = new Chart(context, {
       type: 'scatter',
       data: {
         datasets: [],
@@ -40,8 +40,8 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
         tooltips: {
           callbacks: {
             label: ((tooltipItem: ChartTooltipItem) => {
-              const xAxis = this.chartService.formatTooltip(this.country, this.xAxisMetric, tooltipItem.xLabel);
-              const yAxis = this.chartService.formatTooltip(this.country, this.yAxisMetric, tooltipItem.yLabel);
+              const xAxis = this.chartService.formatLabel(this.country, this.xAxisMetric, tooltipItem.xLabel);
+              const yAxis = this.chartService.formatLabel(this.country, this.yAxisMetric, tooltipItem.yLabel);
               return ` ${xAxis} - ${yAxis}`;
             })
           }
@@ -51,12 +51,22 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
             type: 'linear',
             position: 'bottom',
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              callback: (value) => this.chartService.formatLabel(this.country, this.xAxisMetric, value),
+            },
+            scaleLabel: {
+              display: true,
+              labelString: this.xAxisMetric,
             }
           }],
           yAxes: [{
             ticks: {
-              beginAtZero: true
+              beginAtZero: true,
+              callback: (value) => this.chartService.formatLabel(this.country, this.yAxisMetric, value),
+            },
+            scaleLabel: {
+              display: true,
+              labelString: this.yAxisMetric,
             }
           }]
         }
@@ -88,6 +98,13 @@ export class ScatterChartComponent implements OnInit, OnChanges, OnDestroy {
     }
     if (changes.title && changes.title.currentValue && this.chart) {
       this.chartService.updateTitle(this.chart, this.title);
+    }
+    if (
+      ((changes.xAxisMetric && changes.xAxisMetric.currentValue)
+      || (changes.yAxisMetric && changes.yAxisMetric.currentValue))
+      && !!this.chart
+    ) {
+      this.chartService.updateAxisTitles(this.chart, this.xAxisMetric, this.yAxisMetric);
     }
   }
 

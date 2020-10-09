@@ -87,19 +87,18 @@ export class ChartService {
     };
   }
 
-  formatTooltip(country: Country, type: UniversalMetrics, axis: string | number): string {
+  formatLabel(country: Country, type: UniversalMetrics, value: string | number): string {
     switch (type) {
       case UniversalMetrics.Price:
-        return this.formatCurrency(country, Number(axis));
+        return this.formatCurrency(country, Number(value));
       case UniversalMetrics.SurfaceArea:
-        return this.formatSurfaceArea(country, Number(axis));
+        return this.formatSurfaceArea(country, Number(value));
       case UniversalMetrics.NumberOfBedrooms:
-        return this.formatRooms(axis, true);
+        return this.formatRooms(value, true);
       case UniversalMetrics.NumberOfRooms:
-        return this.formatRooms(axis, false);
+        return this.formatRooms(value, false);
       default:
-        console.log('INSIDE DEFAULT');
-        return `${axis}`;
+        return `${value}`;
     }
   }
 
@@ -111,17 +110,23 @@ export class ChartService {
   }
 
   formatSurfaceArea(country: Country, value: number | string): string {
-    const format = country === Country.France ? 'm2' : 'sqft';
+    const format = country === Country.France ? 'm²' : 'sqft';
     return `${value} ${format}`;
   }
 
   formatRooms(value: number | string, isBedrooms: boolean): string {
-    const format = isBedrooms ? 'bedrooms' : 'rooms';
+    const format = isBedrooms ? 'bdrms' : 'rms';
     return `${value} ${format}`;
   }
 
   updateTitle(chart: Chart, title: string) {
     chart.options.title.text = title;
+    chart.update();
+  }
+
+  updateAxisTitles(chart: Chart, xAxisMetric: UniversalMetrics, yAxisMetric: UniversalMetrics) {
+    chart.options.scales.xAxes[0].scaleLabel.labelString = xAxisMetric;
+    chart.options.scales.yAxes[0].scaleLabel.labelString = yAxisMetric;
     chart.update();
   }
 

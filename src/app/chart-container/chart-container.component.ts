@@ -8,7 +8,7 @@ import {
   selectChartOptions,
   selectChartDatasets,
   selectXAxisMetric,
-  selectYAxisMetric, selectPaymentType, selectChartTitle
+  selectYAxisMetric, selectPaymentType, selectChartTitle, selectAxesMetrics
 } from '../../store/selectors/global.selectors';
 import { Observable } from 'rxjs';
 import { AllCitiesList, Country, UniversalMetrics, UniversalListingProperties, PaymentType } from '../../../models';
@@ -23,8 +23,10 @@ import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
 export class ChartContainerComponent implements OnInit {
   public country$: Observable<Country> = this.store.select(selectCountry);
   public selectedCities$: Observable<AllCitiesList[]> = this.store.select(selectCities);
-  public xAxisMetric$: Observable<UniversalMetrics> = this.store.select(selectXAxisMetric);
-  public yAxisMetric$: Observable<UniversalMetrics> = this.store.select(selectYAxisMetric);
+  public axesMetrics$: Observable<{
+    xAxisMetric: UniversalMetrics,
+    yAxisMetric: UniversalMetrics,
+  }> = this.store.select(selectAxesMetrics);
   public unifiedData$: Observable<UniversalListingProperties[]> = this.store.select(selectUniformData);
   public chartType$: Observable<ChartType> = this.store.select(selectChartType);
   public paymentType$: Observable<PaymentType> = this.store.select(selectPaymentType);

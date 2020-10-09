@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
+import { FormsModule } from '@angular/forms';
 
 import * as fromGlobalActions from '../store/reducers/global.reducer';
 import * as fromFranceActions from '../store/reducers/france.reducer';
@@ -28,6 +29,7 @@ import { ScatterChartComponent } from './scatter-chart/scatter-chart.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     StoreModule.forRoot({
       globalState: fromGlobalActions.reducer,
       franceState: fromFranceActions.reducer,

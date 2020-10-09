@@ -4,6 +4,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/models';
 import * as fromActions from '../../store/actions';
 import { ChartType } from 'chart.js';
+import { Observable } from 'rxjs';
+import { selectAxesMetrics, selectChartType } from '../../store/selectors';
 
 @Component({
   selector: 'app-settings-container',
@@ -14,23 +16,35 @@ export class SettingsContainerComponent implements OnInit {
   public chartTypes: ChartType[] = ['bar', 'bubble', 'doughnut', 'horizontalBar', 'line', 'pie', 'polarArea', 'radar', 'scatter'];
   public paymentTypes = [PaymentType.Buy, PaymentType.Rent];
   public countries = [Country.France, Country.Us];
-  public xAxis = '';
-  public yAxis = '';
   public axisOptions = [
     UniversalMetrics.City,
-    UniversalMetrics.Latitude,
-    UniversalMetrics.Longitude,
     UniversalMetrics.NumberOfBedrooms,
     UniversalMetrics.NumberOfRooms,
     UniversalMetrics.PostalCode,
     UniversalMetrics.Price,
     UniversalMetrics.SurfaceArea
   ];
+  public axesMetrics$: Observable<{
+    xAxisMetric: UniversalMetrics,
+    yAxisMetric: UniversalMetrics,
+  }> = this.store.select(selectAxesMetrics);
+  public chartType$ = this.store.select(selectChartType);
+
+  selectedXMetric = UniversalMetrics.Price;
+  selectedYMetric = UniversalMetrics.SurfaceArea;
+  selectedChartType: ChartType = 'scatter';
 
   constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
     this.store.dispatch(fromActions.initialSetup());
+    this.axesMetrics$.subscribe((axes) => {
+      this.selectedXMetric = axes.xAxisMetric;
+      this.selectedYMetric = axes.yAxisMetric;
+    });
+    this.chartType$.subscribe((chartType: ChartType) => {
+      this.selectedChartType = chartType;
+    });
   }
 
   updateChartType(chart: ChartType) {
