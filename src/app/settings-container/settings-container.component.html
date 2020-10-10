@@ -1,4 +1,5 @@
 <br>
+
 <div>
   <div>Chart Type</div>
   <select [(ngModel)]="selectedChartType" (change)="updateChartType($event.target.value)">
@@ -31,4 +32,14 @@
   <select [(ngModel)]="selectedYMetric" (change)="updateYAxis($event.target.value)">
     <option *ngFor="let option of axisOptions" value="{{ option }}">{{ option }}</option>
   </select>
+</div>
+
+<br>
+
+<div>
+  <div>City List</div>
+  <div *ngFor="let city of (allCities$ | async)">
+    <input type="checkbox" id="city" name="city" value="{{ city }}" (change)="updateActiveCitiesList(city)">
+    <label for="city">{{ city }}</label><br>
+  </div>
 </div>

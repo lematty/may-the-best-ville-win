@@ -42,7 +42,13 @@ export enum UniversalMetrics {
   PostalCode = 'postalCode'
 }
 
+export interface ActiveCity {
+  city: string;
+  color: string;
+}
+
 export type FranceMetrics = keyof FranceBuyListingJsonFormat;
 export type UsMetrics = keyof UsBuyListingJsonFormat;
-
-export type AllCitiesList = Array<FranceCityList | UsCityList>;
+// export type City = string;
+// export type City = FranceCityList | UsCityList;
+// export type City = Array<FranceCityList | UsCityList>;

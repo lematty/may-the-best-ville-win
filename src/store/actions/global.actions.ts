@@ -1,7 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { ChartDataSets, ChartType } from 'chart.js';
 import {
-  AllCitiesList,
   Country,
   FranceUniversalListingJsonFormat,
   PaymentType,
@@ -19,8 +18,10 @@ export const updatePaymentType = createAction('[Global] Update payment type', pr
 export const updateXAxisMetric = createAction('[Global] Update X axis metric', props<{ xAxisMetric: UniversalMetrics }>());
 export const updateYAxisMetric = createAction('[Global] Update Y axis metric', props<{ yAxisMetric: UniversalMetrics }>());
 
-export const addCity = createAction('[Global] Add city', props<{ city: AllCitiesList }>());
-export const removeCity = createAction('[Global] Remove city', props<{ city: AllCitiesList }>());
+export const populateCityList = createAction('[Global] Populate city list', props<{ cityList: string[] }>());
+
+export const addCity = createAction('[Global] Add city', props<{ city: string, color: string }>());
+export const removeCity = createAction('[Global] Remove city', props<{ city: string }>());
 
 export const addFranceDataToUnifiedData = createAction('[France] Add France buy data to unified data', props<{ unifiedData: UniversalListingJsonFormat[] }>());
 export const addUsDataToUnifiedData = createAction('[US] Add US buy data to unified data');

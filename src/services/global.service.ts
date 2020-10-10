@@ -30,4 +30,10 @@ export class GlobalService {
       ? this.franceService.unifyFranceData(data)
       : this.usService.unifyUsData(data);
   }
+
+  getCitiesList(buyData: UniversalListingProperties[], rentData: UniversalListingProperties[]): string[] {
+    const buyCityList: string[] = buyData.map(data => data.city);
+    const rentCityList: string[] = rentData.map(data => data.city);
+    return [...new Set([...buyCityList, ...rentCityList])];
+  }
 }

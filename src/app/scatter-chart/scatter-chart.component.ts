@@ -26,7 +26,6 @@ export class ScatterChartComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   buildChart() {
-    console.log(this.datasets);
     const context = this.chartElementRef.nativeElement;
     this.chart = new Chart(context, {
       type: 'scatter',
@@ -76,26 +75,9 @@ export class ScatterChartComponent implements AfterViewInit, OnChanges, OnDestro
     });
   }
 
-  updateDatasets() {
-    this.chartService.removeData(this.chart);
-    this.addData();
-  }
-
-  addData() {
-    this.datasets.forEach((dataset: ChartDataSets) => {
-      this.chart.data.datasets.push({
-        label: dataset.label,
-        data: dataset.data,
-        backgroundColor: this.chartService.getRandomColor()
-      });
-    });
-    this.chart.update();
-    console.log(this.chart);
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.datasets && changes.datasets.currentValue && this.chart) {
-      this.updateDatasets();
+      this.chartService.updateDatasets(this.chart, this.datasets);
     }
     if (changes.title && changes.title.currentValue && this.chart) {
       this.chartService.updateTitle(this.chart, this.title);

@@ -1,6 +1,6 @@
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import {
-  AllCitiesList,
+  ActiveCity,
   Country,
   FranceBuyListingJsonFormat,
   FranceRentListingJsonFormat,
@@ -19,7 +19,8 @@ export interface AppState {
 export interface GlobalState {
   selectedCountry: Country;
   chartType: ChartType;
-  selectedCities: AllCitiesList[];
+  allCities: string[];
+  activeCities: ActiveCity[];
   uniformBuyData: UniversalListingProperties[];
   uniformRentData: UniversalListingProperties[];
   buyChartDatasets: ChartDataSets[];

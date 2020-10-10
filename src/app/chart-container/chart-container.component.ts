@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
+  selectActiveCities,
   selectCountry,
   selectChartType,
-  selectCities,
   selectChartOptions,
   selectAxesMetrics,
   selectBuyChartDatasets,
   selectRentChartDatasets
 } from '../../store/selectors/global.selectors';
 import { Observable } from 'rxjs';
-import { AllCitiesList, Country, UniversalMetrics } from '../../../models';
+import { ActiveCity, Country, UniversalMetrics } from '../../../models';
 import { AppState } from '../../store/models';
 import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
 
@@ -21,7 +21,7 @@ import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
 })
 export class ChartContainerComponent implements OnInit {
   public country$: Observable<Country> = this.store.select(selectCountry);
-  public selectedCities$: Observable<AllCitiesList[]> = this.store.select(selectCities);
+  public activeCities$: Observable<ActiveCity[]> = this.store.select(selectActiveCities);
   public axesMetrics$: Observable<{
     xAxisMetric: UniversalMetrics,
     yAxisMetric: UniversalMetrics,

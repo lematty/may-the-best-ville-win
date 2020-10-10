@@ -30,9 +30,22 @@ export class ChartEffects {
       this.store.select(selectYAxisMetric),
     ),
     map(([action, chartType, xAxis, yAxis]) => {
-      const buyChart = this.chartService.createChartData(chartType, action.buyData, xAxis, yAxis);
-      console.log(buyChart);
-      const rentChart = this.chartService.createChartData(chartType, action.rentData, xAxis, yAxis);
+      const buyChart = this.chartService.updateChartData(chartType, action.buyData, xAxis, yAxis);
+      const rentChart = this.chartService.updateChartData(chartType, action.rentData, xAxis, yAxis);
+      return fromGlobalActions.addChartDatasets({ buyChart: buyChart.datasets, rentChart: rentChart.datasets });
+    })
+  ));
+
+  createCharts$ = createEffect(() => this.actions$.pipe(
+    ofType(fromGlobalActions.updateChartDatasets),
+    withLatestFrom(
+      this.store.select(selectChartType),
+      this.store.select(selectXAxisMetric),
+      this.store.select(selectYAxisMetric),
+    ),
+    map(([action, chartType, xAxis, yAxis]) => {
+      const buyChart = this.chartService.updateChartData(chartType, action.buyData, xAxis, yAxis);
+      const rentChart = this.chartService.updateChartData(chartType, action.rentData, xAxis, yAxis);
       return fromGlobalActions.addChartDatasets({ buyChart: buyChart.datasets, rentChart: rentChart.datasets });
     })
   ));

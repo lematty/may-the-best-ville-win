@@ -32,9 +32,14 @@ export const selectAxesMetrics = createSelector(
   }
 );
 
-export const selectCities = createSelector(
+export const selectAllCities = createSelector(
   selectGlobalState,
-  (state: GlobalState) => state.selectedCities
+  (state: GlobalState) => state.allCities
+);
+
+export const selectActiveCities = createSelector(
+  selectGlobalState,
+  (state: GlobalState) => state.activeCities
 );
 
 export const selectUniformBuyData = createSelector(

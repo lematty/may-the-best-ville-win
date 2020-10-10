@@ -10,7 +10,7 @@ export class ChartService {
 
   constructor() { }
 
-  createChartData(
+  updateChartData(
     chartType: ChartType,
     data: UniversalListingProperties[],
     xAxis?: UniversalMetrics,
@@ -44,7 +44,6 @@ export class ChartService {
     xAxis: UniversalMetrics,
     yAxis: UniversalMetrics
   ): { datasets: ChartDataSets[], options?: ChartOptions } {
-    // const cities = [...new Set( data.map(listing => listing.city)) ];
     const citiesData: ChartDataSets[] = [];
     data.map((listing: UniversalListingProperties) => {
       const cityIndex = citiesData.findIndex((cityData: ChartDataSets) => cityData.label === listing.city);
@@ -124,15 +123,31 @@ export class ChartService {
     chart.update();
   }
 
-  updateAxisTitles(chart: Chart, xAxisMetric: UniversalMetrics, yAxisMetric: UniversalMetrics) {
-    chart.options.scales.xAxes[0].scaleLabel.labelString = xAxisMetric;
-    chart.options.scales.yAxes[0].scaleLabel.labelString = yAxisMetric;
+  addData(chart: Chart, datasets: ChartDataSets[]) {
+    datasets.forEach((dataset: ChartDataSets) => {
+      chart.data.datasets.push({
+        label: dataset.label,
+        data: dataset.data,
+        backgroundColor: this.getRandomColor()
+      });
+    });
     chart.update();
   }
 
-  removeData(chart: Chart) {
+  removeAllData(chart: Chart) {
     chart.data.labels = [];
     chart.data.datasets = [];
+    chart.update();
+  }
+
+  updateDatasets(chart: Chart, datasets: ChartDataSets[]) {
+    this.removeAllData(chart);
+    this.addData(chart, datasets);
+  }
+
+  updateAxisTitles(chart: Chart, xAxisMetric: UniversalMetrics, yAxisMetric: UniversalMetrics) {
+    chart.options.scales.xAxes[0].scaleLabel.labelString = xAxisMetric;
+    chart.options.scales.yAxes[0].scaleLabel.labelString = yAxisMetric;
     chart.update();
   }
 

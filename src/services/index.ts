@@ -1,3 +1,4 @@
+export * from './calculations.service';
 export * from './chart.service';
 export * from './data.service';
 export * from './france.service';

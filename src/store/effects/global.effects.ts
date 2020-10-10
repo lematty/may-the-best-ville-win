@@ -25,18 +25,37 @@ export class GlobalEffects {
     switchMap((action) => {
       const unifiedBuyData = this.globalService.unifyData(action.country, action.buyData);
       const unifiedRentData = this.globalService.unifyData(action.country, action.rentData);
+      const cityList = this.globalService.getCitiesList(unifiedBuyData, unifiedRentData);
       return [
-        fromGlobalActions.updateChartDatasets({ buyData: unifiedBuyData, rentData: unifiedRentData }),
-        fromGlobalActions.addUnifiedDataToStore({ unifiedBuyData, unifiedRentData })
+        // fromGlobalActions.updateChartDatasets({ buyData: unifiedBuyData, rentData: unifiedRentData }),
+        fromGlobalActions.addUnifiedDataToStore({ unifiedBuyData, unifiedRentData }),
+        fromGlobalActions.populateCityList({ cityList }),
       ];
     })
   ));
 
-  fetchRawDataFromJson$ = createEffect(() => this.actions$.pipe(
-    ofType(
-      fromGlobalActions.initialSetup,
-      fromGlobalActions.updateCountry,
-    ),
+  // fetchRawDataFromJson$ = createEffect(() => this.actions$.pipe(
+  //   ofType(
+  //     fromGlobalActions.initialSetup,
+  //     fromGlobalActions.updateCountry,
+  //   ),
+  //   withLatestFrom(this.store.select(selectCountry)),
+  //   mergeMap(([, country]) => {
+  //     return this.globalService.fetchRawDataFromJson(country).pipe(
+  //       switchMap(([buyData, rentData]) => {
+  //         const addRawDataToStoreActions = this.chooseActions(country, buyData, rentData);
+  //         return [
+  //           fromGlobalActions.unifyData({ country, paymentType: PaymentType.Buy, buyData, rentData }),
+  //           addRawDataToStoreActions.buyAction,
+  //           addRawDataToStoreActions.rentAction,
+  //         ];
+  //       })
+  //     );
+  //   })
+  // ));
+
+  intialSetup$ = createEffect(() => this.actions$.pipe(
+    ofType(fromGlobalActions.initialSetup),
     withLatestFrom(this.store.select(selectCountry)),
     mergeMap(([, country]) => {
       return this.globalService.fetchRawDataFromJson(country).pipe(

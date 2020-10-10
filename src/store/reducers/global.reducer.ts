@@ -1,12 +1,13 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import { Country, PaymentType, UniversalMetrics } from '../../../models';
+import { Country, UniversalMetrics } from '../../../models';
 import * as fromActions from '../actions';
 import { GlobalState } from '../models';
 
 export const initialState: GlobalState = {
   selectedCountry: Country.France,
   chartType: 'scatter',
-  selectedCities: [],
+  allCities: [],
+  activeCities: [],
   uniformBuyData: [],
   uniformRentData: [],
   buyChartDatasets: [],
@@ -24,9 +25,11 @@ const globalReducer = createReducer(
   on(fromActions.updateXAxisMetric, (state, { xAxisMetric }) => ({ ...state, xAxisMetric })),
   on(fromActions.updateYAxisMetric, (state, { yAxisMetric }) => ({ ...state, yAxisMetric })),
 
-  on(fromActions.addCity, (state, { city }) => ({ ...state, selectedCities: [...state.selectedCities, city] })),
-  on(fromActions.removeCity, (state, { city }) => ({ ...state, selectedCities: [city, ...state.selectedCities] })),
-  
+  on(fromActions.populateCityList, (state, { cityList }) => ({ ...state, allCities: cityList })),
+
+  on(fromActions.addCity, (state, { city, color }) => ({ ...state, activeCities: [...state.activeCities, { city, color }] })),
+  on(fromActions.removeCity, (state, { city }) => ({ ...state, activeCities: state.activeCities.filter(activeCity => activeCity.city !== city) })),
+
   on(fromActions.addUnifiedDataToStore, (state, { unifiedBuyData, unifiedRentData }) => ({ ...state, unifiedBuyData, unifiedRentData })),
 
   on(fromActions.addBuyChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [...state.buyChartDatasets, dataset] })),

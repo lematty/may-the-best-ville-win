@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AllCitiesList, Country, UniversalMetrics } from '../../../models';
+import { ActiveCity, Country, UniversalMetrics } from '../../../models';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/models';
 import * as fromActions from '../../store/actions';
 import { ChartType } from 'chart.js';
 import { Observable } from 'rxjs';
-import { selectAxesMetrics, selectChartType } from '../../store/selectors';
+import { selectAllCities, selectAxesMetrics, selectChartType, selectActiveCities } from '../../store/selectors';
+import { ChartService } from '../../services';
 
 @Component({
   selector: 'app-settings-container',
@@ -13,10 +14,11 @@ import { selectAxesMetrics, selectChartType } from '../../store/selectors';
   styleUrls: ['./settings-container.component.less']
 })
 export class SettingsContainerComponent implements OnInit {
+  public allCities$: Observable<string[]> = this.store.select(selectAllCities);
+  public activeCities$: Observable<ActiveCity[]> = this.store.select(selectActiveCities);
   public chartTypes: ChartType[] = ['bar', 'bubble', 'doughnut', 'horizontalBar', 'line', 'pie', 'polarArea', 'radar', 'scatter'];
   public countries = [Country.France, Country.Us];
   public axisOptions = [
-    UniversalMetrics.City,
     UniversalMetrics.NumberOfBedrooms,
     UniversalMetrics.NumberOfRooms,
     UniversalMetrics.PostalCode,
@@ -27,13 +29,13 @@ export class SettingsContainerComponent implements OnInit {
     xAxisMetric: UniversalMetrics,
     yAxisMetric: UniversalMetrics,
   }> = this.store.select(selectAxesMetrics);
-  public chartType$ = this.store.select(selectChartType);
+  public selectedChartType$ = this.store.select(selectChartType);
+  public selectedXMetric = UniversalMetrics.Price;
+  public selectedYMetric = UniversalMetrics.SurfaceArea;
+  public selectedChartType: ChartType = 'scatter';
+  public activeCitiesList: ActiveCity[] = [];
 
-  selectedXMetric = UniversalMetrics.Price;
-  selectedYMetric = UniversalMetrics.SurfaceArea;
-  selectedChartType: ChartType = 'scatter';
-
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>, private chartService: ChartService) { }
 
   ngOnInit(): void {
     this.store.dispatch(fromActions.initialSetup());
@@ -41,8 +43,11 @@ export class SettingsContainerComponent implements OnInit {
       this.selectedXMetric = axes.xAxisMetric;
       this.selectedYMetric = axes.yAxisMetric;
     });
-    this.chartType$.subscribe((chartType: ChartType) => {
+    this.selectedChartType$.subscribe((chartType: ChartType) => {
       this.selectedChartType = chartType;
+    });
+    this.activeCities$.subscribe(cities => {
+      this.activeCitiesList = cities;
     });
   }
 
@@ -54,11 +59,17 @@ export class SettingsContainerComponent implements OnInit {
     this.store.dispatch(fromActions.updateCountry({ country }));
   }
 
-  addCity(city: AllCitiesList) {
-    this.store.dispatch(fromActions.addCity({ city }));
+  updateActiveCitiesList(city: string) {
+    const foundCity = this.activeCitiesList.find(cityObject => cityObject.city === city);
+    foundCity ? this.removeCity(city) : this.addCity(city);
   }
 
-  removeCity(city: AllCitiesList) {
+  addCity(city: string) {
+    const color = this.chartService.getRandomColor();
+    this.store.dispatch(fromActions.addCity({ city, color }));
+  }
+
+  removeCity(city: string) {
     this.store.dispatch(fromActions.removeCity({ city }));
   }
 
