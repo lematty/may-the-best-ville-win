@@ -60,7 +60,7 @@ export class SettingsContainerComponent implements OnInit {
   }
 
   updateActiveCitiesList(city: string) {
-    const foundCity = this.activeCitiesList.find(cityObject => cityObject.city === city);
+    const foundCity = this.activeCitiesList.find(activeCity => activeCity.city === city);
     foundCity ? this.removeCity(city) : this.addCity(city);
   }
 

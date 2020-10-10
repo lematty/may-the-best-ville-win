@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { ChartDataSets, ChartType } from 'chart.js';
 import {
+  ActiveCity,
   Country,
   FranceUniversalListingJsonFormat,
   PaymentType,
@@ -32,8 +33,9 @@ export const unifyData = createAction('[Global] Unify data', props<{
   buyData: FranceUniversalListingJsonFormat[]
   rentData: FranceUniversalListingJsonFormat[]
 }>());
+export const formatCityDataset = createAction('[Global] Add city datasets', props<{ activeCity: ActiveCity, buyData: UniversalListingProperties[], rentData: UniversalListingProperties[] }>());
 
-export const addChartDatasets = createAction('[Global] Add rent chart dataset', props<{ buyChart: ChartDataSets[], rentChart: ChartDataSets[] }>());
+export const addChartDatasetsToStore = createAction('[Global] Add rent chart dataset', props<{ activeCity: ActiveCity, buyChart: ChartDataSets[], rentChart: ChartDataSets[] }>());
 export const addBuyChartDataset = createAction('[Global] Add buy chart dataset', props<{ dataset: ChartDataSets }>());
 export const addRentChartDataset = createAction('[Global] Add rent chart dataset', props<{ dataset: ChartDataSets }>());
 

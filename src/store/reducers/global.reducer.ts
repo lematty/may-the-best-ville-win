@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import { Country, UniversalMetrics } from '../../../models';
+import { ActiveCity, Country, UniversalMetrics } from '../../../models';
 import * as fromActions from '../actions';
 import { GlobalState } from '../models';
 
@@ -8,8 +8,9 @@ export const initialState: GlobalState = {
   chartType: 'scatter',
   allCities: [],
   activeCities: [],
-  uniformBuyData: [],
-  uniformRentData: [],
+  lastUpdatedCity: {} as ActiveCity,
+  unifiedBuyData: [],
+  unifiedRentData: [],
   buyChartDatasets: [],
   rentChartDatasets: [],
   chartOptions: {},
@@ -37,7 +38,7 @@ const globalReducer = createReducer(
 
   on(fromActions.addBuyChartDatasets, (state, { datasets }) => ({ ...state, buyChartDatasets: datasets })),
   on(fromActions.addRentChartDatasets, (state, { datasets }) => ({ ...state, rentChartDatasets: datasets })),
-  on(fromActions.addChartDatasets, (state, { buyChart, rentChart }) => ({ ...state, buyChartDatasets: buyChart, rentChartDatasets: rentChart })),
+  on(fromActions.addChartDatasetsToStore, (state, { activeCity, buyChart, rentChart }) => ({ ...state, buyChartDatasets: buyChart, rentChartDatasets: rentChart, lastUpdatedCity: activeCity })),
 
   on(fromActions.removeBuyChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [dataset, ...state.buyChartDatasets] })),
   on(fromActions.removeRentChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [dataset, ...state.rentChartDatasets] })),

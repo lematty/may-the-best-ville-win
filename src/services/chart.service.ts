@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ChartType, ChartDataSets, ChartOptions, ChartPoint } from 'chart.js';
+import { ChartType, ChartDataSets, ChartOptions, ChartPoint, ChartTooltipItem } from 'chart.js';
 import { Country, UniversalListingProperties } from '../../models';
 import { UniversalMetrics } from '../../models/universal.model';
 
@@ -10,7 +10,7 @@ export class ChartService {
 
   constructor() { }
 
-  updateChartData(
+  formatChartData(
     chartType: ChartType,
     data: UniversalListingProperties[],
     xAxis?: UniversalMetrics,
@@ -40,13 +40,13 @@ export class ChartService {
   }
 
   formatScatterChart(
-    data: UniversalListingProperties[],
+    cityData: UniversalListingProperties[],
     xAxis: UniversalMetrics,
     yAxis: UniversalMetrics
   ): { datasets: ChartDataSets[], options?: ChartOptions } {
     const citiesData: ChartDataSets[] = [];
-    data.map((listing: UniversalListingProperties) => {
-      const cityIndex = citiesData.findIndex((cityData: ChartDataSets) => cityData.label === listing.city);
+    cityData.map((listing: UniversalListingProperties) => {
+      const cityIndex = citiesData.findIndex((city: ChartDataSets) => city.label === listing.city);
       const newData = { x: listing[xAxis], y: listing[yAxis] };
       if (cityIndex === -1) {
         citiesData.push({ label: listing.city, data: [newData] });
@@ -67,24 +67,47 @@ export class ChartService {
     return randomColor;
   }
 
-  formatScatterChartOptions(): ChartOptions {
-    return {
-      scales: {
-        xAxes: [{
-          type: 'linear',
-          position: 'bottom',
-          ticks: {
-            min: 0,
-          },
-        }],
-        yAxes: [{
-          ticks: {
-            min: 0,
-          },
-        }]
-      },
-    };
-  }
+  // formatScatterChartOptions(country: Country, xAxisMetric: UniversalMetrics, yAxisMetric: UniversalMetrics, options?: ChartOptions): ChartOptions {
+  //   return {
+  //     title: {
+  //       display: true,
+  //       text: this.title || ''
+  //     },
+  //     tooltips: {
+  //       callbacks: {
+  //         label: ((tooltipItem: ChartTooltipItem) => {
+  //           const xAxis = this.formatLabel(country, xAxisMetric, tooltipItem.xLabel);
+  //           const yAxis = this.formatLabel(country, yAxisMetric, tooltipItem.yLabel);
+  //           return ` ${xAxis} - ${yAxis}`;
+  //         })
+  //       }
+  //     },
+  //     scales: {
+  //       xAxes: [{
+  //         type: 'linear',
+  //         position: 'bottom',
+  //         ticks: {
+  //           beginAtZero: true,
+  //           callback: (value) => this.formatLabel(country, xAxisMetric, value),
+  //         },
+  //         scaleLabel: {
+  //           display: true,
+  //           labelString: xAxisMetric,
+  //         }
+  //       }],
+  //       yAxes: [{
+  //         ticks: {
+  //           beginAtZero: true,
+  //           callback: (value) => this.formatLabel(country, yAxisMetric, value),
+  //         },
+  //         scaleLabel: {
+  //           display: true,
+  //           labelString: yAxisMetric,
+  //         }
+  //       }]
+  //     }
+  //   };
+  // }
 
   formatLabel(country: Country, type: UniversalMetrics, value: string | number): string {
     switch (type) {
@@ -123,12 +146,12 @@ export class ChartService {
     chart.update();
   }
 
-  addData(chart: Chart, datasets: ChartDataSets[]) {
+  addData(chart: Chart, datasets: ChartDataSets[], color?: string) {
     datasets.forEach((dataset: ChartDataSets) => {
       chart.data.datasets.push({
         label: dataset.label,
         data: dataset.data,
-        backgroundColor: this.getRandomColor()
+        backgroundColor: color || this.getRandomColor(),
       });
     });
     chart.update();

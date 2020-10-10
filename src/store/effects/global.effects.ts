@@ -4,10 +4,11 @@ import { Store } from '@ngrx/store';
 import * as fromGlobalActions from '../actions/global.actions';
 import * as fromFranceActions from '../actions/france.actions';
 import * as fromUsActions from '../actions/us.actions';
-import { mergeMap, withLatestFrom, switchMap } from 'rxjs/operators';
+import { mergeMap, withLatestFrom, switchMap, map } from 'rxjs/operators';
 import { selectCountry } from '../selectors';
 import { AppState } from '../models';
 import { GlobalService } from '../../services';
+import { selectUniformData } from '../selectors/global.selectors';
 import {
   Country,
   FranceBuyListingJsonFormat,
@@ -68,6 +69,18 @@ export class GlobalEffects {
           ];
         })
       );
+    })
+  ));
+
+  addCity$ = createEffect(() => this.actions$.pipe(
+    ofType(fromGlobalActions.addCity),
+    withLatestFrom(this.store.select(selectUniformData)),
+    map(([action, data]) => {
+      const buyData = data.buyData.filter(listing => listing.city === action.city);
+      const rentData = data.rentData.filter(listing => listing.city === action.city);
+      console.log(data);
+      const activeCity = { city: action.city, color: action.color };
+      return fromGlobalActions.formatCityDataset({ activeCity, buyData, rentData });
     })
   ));
 

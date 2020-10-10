@@ -42,14 +42,21 @@ export const selectActiveCities = createSelector(
   (state: GlobalState) => state.activeCities
 );
 
+export const selectUniformData = createSelector(
+  selectGlobalState,
+  (state: GlobalState) => {
+    return { buyData: state.unifiedBuyData, rentData: state.unifiedRentData };
+  }
+);
+
 export const selectUniformBuyData = createSelector(
   selectGlobalState,
-  (state: GlobalState) => state.uniformBuyData
+  (state: GlobalState) => state.unifiedBuyData
 );
 
 export const selectUniformRentData = createSelector(
   selectGlobalState,
-  (state: GlobalState) => state.uniformBuyData
+  (state: GlobalState) => state.unifiedRentData
 );
 
 export const selectBuyChartDatasets = createSelector(
