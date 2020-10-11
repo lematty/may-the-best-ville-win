@@ -45,6 +45,8 @@ export enum UniversalMetrics {
 export interface ActiveCity {
   city: string;
   color: string;
+  averageBuyPrice: number;
+  averageRentPrice: number;
 }
 
 export type FranceMetrics = keyof FranceBuyListingJsonFormat;

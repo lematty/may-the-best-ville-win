@@ -42,9 +42,14 @@ export const selectActiveCities = createSelector(
   (state: GlobalState) => state.activeCities
 );
 
-export const selectLastUpdatedCity = createSelector(
+export const selectLastAddedCity = createSelector(
   selectGlobalState,
-  (state: GlobalState) => state.lastUpdatedCity
+  (state: GlobalState) => state.lastAddedCity
+);
+
+export const selectLastRemovedCity = createSelector(
+  selectGlobalState,
+  (state: GlobalState) => state.lastRemovedCity
 );
 
 export const selectUniformData = createSelector(

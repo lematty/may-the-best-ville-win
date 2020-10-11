@@ -21,7 +21,8 @@ export interface GlobalState {
   chartType: ChartType;
   allCities: string[];
   activeCities: ActiveCity[];
-  lastUpdatedCity: ActiveCity;
+  lastAddedCity: ActiveCity;
+  lastRemovedCity: string;
   unifiedBuyData: UniversalListingProperties[];
   unifiedRentData: UniversalListingProperties[];
   buyChartDatasets: ChartDataSets[];

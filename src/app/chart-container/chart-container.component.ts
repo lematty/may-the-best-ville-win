@@ -7,8 +7,9 @@ import {
   selectChartOptions,
   selectAxesMetrics,
   selectBuyChartDatasets,
+  selectLastAddedCity,
   selectRentChartDatasets,
-  selectLastUpdatedCity
+  selectLastRemovedCity,
 } from '../../store/selectors/global.selectors';
 import { Observable } from 'rxjs';
 import { ActiveCity, Country, UniversalMetrics } from '../../../models';
@@ -23,7 +24,8 @@ import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
 export class ChartContainerComponent implements OnInit {
   public country$: Observable<Country> = this.store.select(selectCountry);
   public activeCities$: Observable<ActiveCity[]> = this.store.select(selectActiveCities);
-  public lastUpdatedCity$: Observable<ActiveCity> = this.store.select(selectLastUpdatedCity);
+  public lastAddedCity$: Observable<ActiveCity> = this.store.select(selectLastAddedCity);
+  public lastRemovedCity$: Observable<string> = this.store.select(selectLastRemovedCity);
   public axesMetrics$: Observable<{
     xAxisMetric: UniversalMetrics,
     yAxisMetric: UniversalMetrics,

@@ -65,8 +65,12 @@ export class SettingsContainerComponent implements OnInit {
   }
 
   addCity(city: string) {
+    console.log('ADD CITY');
     const color = this.chartService.getRandomColor();
+    console.log(color);
+    // this.store.dispatch(fromActions.testAction({ text: 'test text' }));
     this.store.dispatch(fromActions.addCity({ city, color }));
+    console.log('ADD CITY FINISHED');
   }
 
   removeCity(city: string) {
