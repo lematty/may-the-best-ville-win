@@ -9,7 +9,9 @@
         && (country$ | async)
         && (options$ | async)"
       [datasets]="buyDatasets$ | async"
-      [lastUpdatedCity]="lastUpdatedCity$ | async"
+      [activeCities]="activeCities$ | async"
+      [lastAddedCity]="lastAddedCity$ | async"
+      [lastRemovedCity]="lastRemovedCity$ | async"
       [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
       [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
       [title]="'Buy'"
@@ -27,7 +29,9 @@
         && (country$ | async)
         && (options$ | async)"
       [datasets]="rentDatasets$ | async"
-      [lastUpdatedCity]="lastUpdatedCity$ | async"
+      [activeCities]="activeCities$ | async"
+      [lastAddedCity]="lastAddedCity$ | async"
+      [lastRemovedCity]="lastRemovedCity$ | async"
       [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
       [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
       [title]="'Rent'"

@@ -21,6 +21,8 @@ export const updateYAxisMetric = createAction('[Global] Update Y axis metric', p
 
 export const populateCityList = createAction('[Global] Populate city list', props<{ cityList: string[] }>());
 
+export const testAction = createAction('[Global] Test action', props<{ text: string }>());
+export const addCityToStore = createAction('[Global] Add city', props<{ city: string, color: string, averageBuyPrice: number, averageRentPrice: number }>());
 export const addCity = createAction('[Global] Add city', props<{ city: string, color: string }>());
 export const removeCity = createAction('[Global] Remove city', props<{ city: string }>());
 

@@ -4,8 +4,6 @@ import { ChartService } from '../../services';
 import { ActiveCity, Country, UniversalMetrics } from '../../../models';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/models';
-import { Observable } from 'rxjs';
-import { selectLastUpdatedCity } from '../../store/selectors';
 
 @Component({
   selector: 'app-scatter-chart',
@@ -16,12 +14,17 @@ export class ScatterChartComponent implements AfterViewInit, OnChanges, OnDestro
   @Input() title: string;
   @Input() datasets: ChartDataSets[];
   @Input() cityList: string[];
-  @Input() lastUpdatedCity: ActiveCity;
+  @Input() activeCities: string[];
+  @Input() lastAddedCity: ActiveCity;
+  @Input() lastRemovedCity: string;
   @Input() xAxisMetric: UniversalMetrics;
   @Input() yAxisMetric: UniversalMetrics;
   @Input() country: Country;
   @Input() options: ChartOptions;
   @ViewChild('chart') chartElementRef: ElementRef;
+
+  private datasetSize = 0;
+  l
 
   chart: Chart;
 
@@ -83,9 +86,18 @@ export class ScatterChartComponent implements AfterViewInit, OnChanges, OnDestro
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.datasets && changes.datasets.currentValue && this.chart) {
-      console.log('UPDATING....')
-      this.chartService.addData(this.chart, this.datasets, this.lastUpdatedCity.color);
+      console.log('ADDING DATA');
+      this.chartService.addData(this.chart, this.datasets, this.lastAddedCity.color);
+      this.datasetSize += 1;
       // this.chartService.updateDatasets(this.chart, this.datasets);
+    }
+
+    if (changes.activeCities && changes.activeCities.currentValue && this.chart) {
+      if (this.activeCities.length < this.datasetSize) {
+        console.log('REMOVING DATA');
+        this.chartService.removeData(this.chart, this.lastRemovedCity);
+        this.datasetSize -= 1;
+      }
     }
     if (changes.title && changes.title.currentValue && this.chart) {
       this.chartService.updateTitle(this.chart, this.title);
