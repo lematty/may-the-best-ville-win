@@ -35,26 +35,6 @@ export class GlobalEffects {
     })
   ));
 
-  // fetchRawDataFromJson$ = createEffect(() => this.actions$.pipe(
-  //   ofType(
-  //     fromGlobalActions.initialSetup,
-  //     fromGlobalActions.updateCountry,
-  //   ),
-  //   withLatestFrom(this.store.select(selectCountry)),
-  //   mergeMap(([, country]) => {
-  //     return this.globalService.fetchRawDataFromJson(country).pipe(
-  //       switchMap(([buyData, rentData]) => {
-  //         const addRawDataToStoreActions = this.chooseActions(country, buyData, rentData);
-  //         return [
-  //           fromGlobalActions.unifyData({ country, paymentType: PaymentType.Buy, buyData, rentData }),
-  //           addRawDataToStoreActions.buyAction,
-  //           addRawDataToStoreActions.rentAction,
-  //         ];
-  //       })
-  //     );
-  //   })
-  // ));
-
   intialSetup$ = createEffect(() => this.actions$.pipe(
     ofType(fromGlobalActions.initialSetup),
     withLatestFrom(this.store.select(selectCountry)),
@@ -78,7 +58,6 @@ export class GlobalEffects {
     map(([action, data]) => {
       const buyData = data.buyData.filter(listing => listing.city === action.city);
       const rentData = data.rentData.filter(listing => listing.city === action.city);
-      console.log(data);
       const activeCity = { city: action.city, color: action.color };
       return fromGlobalActions.formatCityDataset({ activeCity, buyData, rentData });
     })

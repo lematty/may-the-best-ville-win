@@ -42,6 +42,11 @@ export const selectActiveCities = createSelector(
   (state: GlobalState) => state.activeCities
 );
 
+export const selectLastUpdatedCity = createSelector(
+  selectGlobalState,
+  (state: GlobalState) => state.lastUpdatedCity
+);
+
 export const selectUniformData = createSelector(
   selectGlobalState,
   (state: GlobalState) => {

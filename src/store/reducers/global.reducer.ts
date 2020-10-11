@@ -33,15 +33,15 @@ const globalReducer = createReducer(
 
   on(fromActions.addUnifiedDataToStore, (state, { unifiedBuyData, unifiedRentData }) => ({ ...state, unifiedBuyData, unifiedRentData })),
 
-  on(fromActions.addBuyChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [...state.buyChartDatasets, dataset] })),
-  on(fromActions.addRentChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [...state.rentChartDatasets, dataset] })),
+  on(fromActions.addBuyChartDataset, (state, { dataset }) => ({ ...state, buyChartDatasets: [...state.buyChartDatasets, dataset] })),
+  on(fromActions.addRentChartDataset, (state, { dataset }) => ({ ...state, rentChartDatasets: [...state.rentChartDatasets, dataset] })),
 
   on(fromActions.addBuyChartDatasets, (state, { datasets }) => ({ ...state, buyChartDatasets: datasets })),
   on(fromActions.addRentChartDatasets, (state, { datasets }) => ({ ...state, rentChartDatasets: datasets })),
   on(fromActions.addChartDatasetsToStore, (state, { activeCity, buyChart, rentChart }) => ({ ...state, buyChartDatasets: buyChart, rentChartDatasets: rentChart, lastUpdatedCity: activeCity })),
 
-  on(fromActions.removeBuyChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [dataset, ...state.buyChartDatasets] })),
-  on(fromActions.removeRentChartDataset, (state, { dataset }) => ({ ...state, chartDatasets: [dataset, ...state.rentChartDatasets] })),
+  on(fromActions.removeBuyChartDataset, (state, { dataset }) => ({ ...state, buyChartDatasets: [dataset, ...state.buyChartDatasets] })),
+  on(fromActions.removeRentChartDataset, (state, { dataset }) => ({ ...state, rentChartDatasets: [dataset, ...state.rentChartDatasets] })),
 );
 
 export function reducer(state: GlobalState | undefined, action: Action) {

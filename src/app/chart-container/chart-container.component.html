@@ -9,6 +9,7 @@
         && (country$ | async)
         && (options$ | async)"
       [datasets]="buyDatasets$ | async"
+      [lastUpdatedCity]="lastUpdatedCity$ | async"
       [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
       [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
       [title]="'Buy'"
@@ -26,6 +27,7 @@
         && (country$ | async)
         && (options$ | async)"
       [datasets]="rentDatasets$ | async"
+      [lastUpdatedCity]="lastUpdatedCity$ | async"
       [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
       [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
       [title]="'Rent'"
