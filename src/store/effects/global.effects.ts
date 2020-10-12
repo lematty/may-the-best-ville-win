@@ -57,12 +57,35 @@ export class GlobalEffects {
     withLatestFrom(this.store.select(selectUniformData)),
     switchMap(([action, data]) => {
       const buyData = data.buyData.filter(listing => listing.city === action.city);
-      const buyPrices = buyData.map(listing => listing.price);
-      const averageBuyPrice = this.calculationService.getAverage(buyPrices);
       const rentData = data.rentData.filter(listing => listing.city === action.city);
+
+      const buyPrices = buyData.map(listing => listing.price);
       const rentPrices = rentData.map(listing => listing.price);
+      const averageBuyPrice = this.calculationService.getAverage(buyPrices);
       const averageRentPrice = this.calculationService.getAverage(rentPrices);
-      const activeCity = { city: action.city, color: action.color, averageBuyPrice, averageRentPrice };
+
+      const buySurfaceAreas = buyData.map(listing => listing.surfaceArea);
+      const rentSurfaceAreas = rentData.map(listing => listing.surfaceArea);
+      const averageRentSurfaceArea = this.calculationService.getAverage(rentSurfaceAreas);
+      const averageBuySurfaceArea = this.calculationService.getAverage(buySurfaceAreas);
+
+      const buyPricesBySurfaceArea = buyData.map(listing => listing.price / listing.surfaceArea);
+      const rentPricesBySurfaceArea = rentData.map(listing => listing.price / listing.surfaceArea);
+      const averageBuyPriceBySurfaceArea = this.calculationService.getAverage(buyPricesBySurfaceArea);
+      const averageRentPriceBySurfaceArea = this.calculationService.getAverage(rentPricesBySurfaceArea);
+
+      const monthsToPayLoan = averageBuyPriceBySurfaceArea / averageRentPriceBySurfaceArea;
+      const activeCity = {
+        city: action.city,
+        color: action.color,
+        averageBuyPrice,
+        averageBuySurfaceArea,
+        averageBuyPriceBySurfaceArea,
+        averageRentPrice,
+        averageRentSurfaceArea,
+        averageRentPriceBySurfaceArea,
+        monthsToPayLoan,
+      };
       return [
         // fromGlobalActions.addCityToStore(activeCity),
         fromGlobalActions.formatCityDataset({ activeCity, buyData, rentData })

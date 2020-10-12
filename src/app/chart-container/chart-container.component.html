@@ -1,42 +1,55 @@
 <div>
-  <div>
-    <app-scatter-chart
-      *ngIf="
-        ((chartType$ | async) === 'scatter')
-        && (buyDatasets$ | async)
-        && (axesMetrics$ | async)?.xAxisMetric
-        && (axesMetrics$ | async)?.yAxisMetric
-        && (country$ | async)
-        && (options$ | async)"
-      [datasets]="buyDatasets$ | async"
-      [activeCities]="activeCities$ | async"
-      [lastAddedCity]="lastAddedCity$ | async"
-      [lastRemovedCity]="lastRemovedCity$ | async"
-      [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
-      [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
-      [title]="'Buy'"
-      [country]="country$ | async"
-      [options]="options$ | async">
-    </app-scatter-chart>
+  <div style="display: flex;">
+    <div>
+      <app-scatter-chart
+        *ngIf="
+          ((chartType$ | async) === 'scatter')
+          && (buyDatasets$ | async)
+          && (axesMetrics$ | async)?.xAxisMetric
+          && (axesMetrics$ | async)?.yAxisMetric
+          && (country$ | async)
+          && (options$ | async)"
+        [datasets]="buyDatasets$ | async"
+        [activeCities]="activeCities$ | async"
+        [lastAddedCity]="lastAddedCity$ | async"
+        [lastRemovedCity]="lastRemovedCity$ | async"
+        [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
+        [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
+        [title]="'Buy'"
+        [country]="country$ | async"
+        [options]="options$ | async">
+      </app-scatter-chart>
+    </div>
+    <div>
+      <app-scatter-chart
+        *ngIf="
+          ((chartType$ | async) === 'scatter')
+          && (rentDatasets$ | async)
+          && (axesMetrics$ | async)?.xAxisMetric
+          && (axesMetrics$ | async)?.yAxisMetric
+          && (country$ | async)
+          && (options$ | async)"
+        [datasets]="rentDatasets$ | async"
+        [activeCities]="activeCities$ | async"
+        [lastAddedCity]="lastAddedCity$ | async"
+        [lastRemovedCity]="lastRemovedCity$ | async"
+        [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
+        [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
+        [title]="'Rent'"
+        [country]="country$ | async"
+        [options]="options$ | async">
+      </app-scatter-chart>
+    </div>
   </div>
   <div>
-    <app-scatter-chart
-      *ngIf="
-        ((chartType$ | async) === 'scatter')
-        && (rentDatasets$ | async)
-        && (axesMetrics$ | async)?.xAxisMetric
-        && (axesMetrics$ | async)?.yAxisMetric
-        && (country$ | async)
-        && (options$ | async)"
-      [datasets]="rentDatasets$ | async"
-      [activeCities]="activeCities$ | async"
-      [lastAddedCity]="lastAddedCity$ | async"
-      [lastRemovedCity]="lastRemovedCity$ | async"
-      [xAxisMetric]="(axesMetrics$ | async)?.xAxisMetric"
-      [yAxisMetric]="(axesMetrics$ | async)?.yAxisMetric"
-      [title]="'Rent'"
-      [country]="country$ | async"
-      [options]="options$ | async">
-    </app-scatter-chart>
+    <div *ngFor="let city of (activeCities$ | async)">
+      <div>
+        <div>City: {{ city.city }}</div>
+        <div>Buy Price per m²: {{ city.averageBuyPriceBySurfaceArea | currency:'EUR' }}</div>
+        <div>Rent Price per m²: {{ city.averageRentPriceBySurfaceArea | currency:'EUR' }}</div>
+        <div>Months to pay off loan: {{ city.monthsToPayLoan | number:'1.1-2' }} months</div>
+      </div>
+      <br>
+    </div>
   </div>
 </div>

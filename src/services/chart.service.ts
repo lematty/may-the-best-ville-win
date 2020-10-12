@@ -158,7 +158,6 @@ export class ChartService {
   }
 
   removeData(chart: Chart, city: string) {
-    console.log('')
     chart.data.datasets = chart.data.datasets.filter((dataset: ChartDataSets) => dataset.label !== city);
     chart.update();
   }
