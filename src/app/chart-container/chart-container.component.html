@@ -1,5 +1,5 @@
 <div>
-  <div style="display: flex;">
+  <div class="chart-container">
     <div>
       <app-scatter-chart
         *ngIf="
@@ -41,15 +41,37 @@
       </app-scatter-chart>
     </div>
   </div>
-  <div>
-    <div *ngFor="let city of (activeCities$ | async)">
-      <div>
-        <div>City: {{ city.city }}</div>
-        <div>Buy Price per m²: {{ city.averageBuyPriceBySurfaceArea | currency:'EUR' }}</div>
-        <div>Rent Price per m²: {{ city.averageRentPriceBySurfaceArea | currency:'EUR' }}</div>
-        <div>Months to pay off loan: {{ city.monthsToPayLoan | number:'1.1-2' }} months</div>
-      </div>
-      <br>
-    </div>
-  </div>
+  <br>
+  <table>
+    <tr>
+      <th>City</th>
+      <th>Buy Price / m²</th>
+      <th>Rent Price / m²</th>
+      <th>Months to pay loan</th>
+      <th>Price for 25m²</th>
+      <th>Minimum Price / m²</th>
+      <th>Max Total price</th>
+      <th>Mortgage 25m²</th>
+      <th>Rental 25m²</th>
+      <th>Difference</th>
+    </tr>
+    <tr *ngFor="let city of (activeCities$ | async)">
+      <td>{{ city.city }}</td>
+      <td>{{ city.averageBuyPriceBySurfaceArea | currency:'EUR' }}</td>
+      <td>{{ city.averageRentPriceBySurfaceArea | currency:'EUR' }}</td>
+      <td>{{ city.monthsToPayLoan | number:'1.1-2' }} months</td>
+      <td>{{ city.totalBuyPrice | currency:'EUR' }}</td>
+      <td>{{ city.minimumPrice | currency:'EUR' }}</td>
+      <td>{{ city.minimumPrice * 25 | currency:'EUR' }}</td>
+      <td>{{ city.monthlyBuyEstimation | currency:'EUR' }}</td>
+      <td [ngClass]="{
+        'positive': isPositiveIncome(city.monthlyBuyEstimation, city.monthlyRentEstimation),
+        'negative': !isPositiveIncome(city.monthlyBuyEstimation, city.monthlyRentEstimation)
+      }">{{ city.monthlyRentEstimation | currency:'EUR' }}</td>
+      <td [ngClass]="{
+        'positive': isPositiveIncome(city.monthlyBuyEstimation, city.monthlyRentEstimation),
+        'negative': !isPositiveIncome(city.monthlyBuyEstimation, city.monthlyRentEstimation)
+      }">{{ city.monthlyDifference | currency:'EUR' }}</td>
+    </tr>
+  </table>
 </div>

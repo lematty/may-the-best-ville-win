@@ -51,6 +51,10 @@ export interface ActiveCity {
   averageRentPrice: number;
   averageRentSurfaceArea: number;
   averageRentPriceBySurfaceArea: number;
+  totalBuyPrice: number;
+  monthlyBuyEstimation: number;
+  monthlyRentEstimation: number;
+  monthlyDifference: number;
   monthsToPayLoan: number;
 }
 

@@ -55,11 +55,10 @@ async function addDataToSpreadsheet(): Promise<void> {
   } catch (error) {
     return error;
   }
-  // const newListings = franceBuyData as FranceUniversalListingRawFormat[];
   const newListings = getListingsFromJson();
   let count = 0;
   const listings = newListings.map(rawListing => {
-    if (!rawListing.result.estViager) {
+    if (!rawListing.result.estViager && rawListing.result.surface > 0) {
       count++;
       return formatListingForSpreadsheet(rawListing);
     }
@@ -119,6 +118,7 @@ function formatListingForSpreadsheet(rawListing: FranceUniversalListingRawFormat
     postalCode: Number(listing.postalCode ? listing.postalCode : 0),
     monthlyPayment: Number(listing.monthlyPayment ? listing.monthlyPayment.replace(' €/mois', '') : 0),
     geometry: JSON.stringify(listing.geometry),
+    date: Date.now(),
   };
 }
 

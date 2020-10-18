@@ -24,7 +24,6 @@ export class ScatterChartComponent implements AfterViewInit, OnChanges, OnDestro
   @ViewChild('chart') chartElementRef: ElementRef;
 
   private datasetSize = 0;
-  l
 
   chart: Chart;
 

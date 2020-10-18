@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { UniversalListingProperties } from '../../models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,5 +17,50 @@ export class CalculationsService {
   getAverage(values: number[]): number {
     const total = values.reduce((acc, value) => acc += value);
     return total / values.length;
+  }
+
+  getDifference(value1: number, value2: number): number {
+    return value1 - value2;
+  }
+
+  getBuyEstimationForStudio(price: number) {
+    const totalPrice = price * 25;
+    const { monthlyPayment } = this.calculateInterest(totalPrice, 20, 1.15);
+    return monthlyPayment;
+  }
+
+  dropPriceToBePositive(averagePriceBySurfaceArea: number, monthlyRentPrice: number): number {
+    let averageBuyPrice = averagePriceBySurfaceArea;
+    let monthlyBuyPrice = this.getBuyEstimationForStudio(averageBuyPrice);
+    while (monthlyRentPrice - monthlyBuyPrice < 0) {
+      averageBuyPrice -= 1;
+      monthlyBuyPrice = this.getBuyEstimationForStudio(averageBuyPrice);
+    }
+    return averageBuyPrice;
+  }
+
+  getAverages(listings: UniversalListingProperties[]): { averagePrice: number, averageSurfaceArea: number, averagePriceBySurfaceArea: number } {
+    const prices = [];
+    const surfaceAreas = [];
+    const pricesBySurfaceArea = [];
+    listings.forEach(listing => {
+      prices.push(listing.price),
+      surfaceAreas.push(listing.surfaceArea);
+      pricesBySurfaceArea.push(listing.price / listing.surfaceArea);
+    });
+    const averagePrice = this.getAverage(prices);
+    const averageSurfaceArea = this.getAverage(surfaceAreas);
+    const averagePriceBySurfaceArea = this.getAverage(pricesBySurfaceArea);
+    return { averagePrice, averageSurfaceArea, averagePriceBySurfaceArea };
+  }
+
+  getRentEstimationForStudio(price: number) {
+    return price * 25;
+  }
+
+  getMonthlyStudioEstimations(buyAreaPrice: number, rentAreaPrice: number): { monthlyBuyEstimation: number, monthlyRentEstimation: number } {
+    const monthlyBuyEstimation = this.getBuyEstimationForStudio(buyAreaPrice);
+    const monthlyRentEstimation = this.getRentEstimationForStudio(rentAreaPrice);
+    return { monthlyBuyEstimation, monthlyRentEstimation };
   }
 }

@@ -59,31 +59,33 @@ export class GlobalEffects {
       const buyData = data.buyData.filter(listing => listing.city === action.city);
       const rentData = data.rentData.filter(listing => listing.city === action.city);
 
-      const buyPrices = buyData.map(listing => listing.price);
-      const rentPrices = rentData.map(listing => listing.price);
-      const averageBuyPrice = this.calculationService.getAverage(buyPrices);
-      const averageRentPrice = this.calculationService.getAverage(rentPrices);
+      const averageBuyData = this.calculationService.getAverages(buyData);
+      const averageRentData = this.calculationService.getAverages(rentData);
 
-      const buySurfaceAreas = buyData.map(listing => listing.surfaceArea);
-      const rentSurfaceAreas = rentData.map(listing => listing.surfaceArea);
-      const averageRentSurfaceArea = this.calculationService.getAverage(rentSurfaceAreas);
-      const averageBuySurfaceArea = this.calculationService.getAverage(buySurfaceAreas);
+      const { monthlyBuyEstimation, monthlyRentEstimation } = this.calculationService.getMonthlyStudioEstimations(
+        averageBuyData.averagePriceBySurfaceArea,
+        averageRentData.averagePriceBySurfaceArea
+      );
 
-      const buyPricesBySurfaceArea = buyData.map(listing => listing.price / listing.surfaceArea);
-      const rentPricesBySurfaceArea = rentData.map(listing => listing.price / listing.surfaceArea);
-      const averageBuyPriceBySurfaceArea = this.calculationService.getAverage(buyPricesBySurfaceArea);
-      const averageRentPriceBySurfaceArea = this.calculationService.getAverage(rentPricesBySurfaceArea);
+      const totalBuyPrice = averageBuyData.averagePriceBySurfaceArea * 25;
+      const monthlyDifference = monthlyRentEstimation - monthlyBuyEstimation;
+      const minimumPrice = this.calculationService.dropPriceToBePositive(averageBuyData.averagePriceBySurfaceArea, monthlyRentEstimation);
+      const monthsToPayLoan = averageBuyData.averagePriceBySurfaceArea / averageRentData.averagePriceBySurfaceArea;
 
-      const monthsToPayLoan = averageBuyPriceBySurfaceArea / averageRentPriceBySurfaceArea;
       const activeCity = {
         city: action.city,
         color: action.color,
-        averageBuyPrice,
-        averageBuySurfaceArea,
-        averageBuyPriceBySurfaceArea,
-        averageRentPrice,
-        averageRentSurfaceArea,
-        averageRentPriceBySurfaceArea,
+        averageBuyPrice: averageBuyData.averagePrice,
+        averageBuySurfaceArea: averageBuyData.averageSurfaceArea,
+        averageBuyPriceBySurfaceArea: averageBuyData.averagePriceBySurfaceArea,
+        averageRentPrice: averageRentData.averagePrice,
+        averageRentSurfaceArea: averageRentData.averageSurfaceArea,
+        averageRentPriceBySurfaceArea: averageRentData.averagePriceBySurfaceArea,
+        totalBuyPrice,
+        minimumPrice,
+        monthlyBuyEstimation,
+        monthlyRentEstimation,
+        monthlyDifference,
         monthsToPayLoan,
       };
       return [
