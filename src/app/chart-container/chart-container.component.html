@@ -45,24 +45,20 @@
   <table>
     <tr>
       <th>City</th>
-      <th>Buy Price / m²</th>
-      <th>Rent Price / m²</th>
-      <th>Months to pay loan</th>
-      <th>Price for 25m²</th>
-      <th>Minimum Price / m²</th>
-      <th>Max Total price</th>
+      <th>Average Buy Price / m²</th>
+      <th>Average Rent Price / m²</th>
+      <th>Average Price for 25m²</th>
       <th>Mortgage 25m²</th>
-      <th>Rental 25m²</th>
-      <th>Difference</th>
+      <th>Average Rental 25m²</th>
+      <th>Average Difference</th>
+      <th>Minimum Price / m²</th>
+      <th>Max Total price 25m²</th>
     </tr>
     <tr *ngFor="let city of (activeCities$ | async)">
       <td>{{ city.city }}</td>
       <td>{{ city.averageBuyPriceBySurfaceArea | currency:'EUR' }}</td>
       <td>{{ city.averageRentPriceBySurfaceArea | currency:'EUR' }}</td>
-      <td>{{ city.monthsToPayLoan | number:'1.1-2' }} months</td>
       <td>{{ city.totalBuyPrice | currency:'EUR' }}</td>
-      <td>{{ city.minimumPrice | currency:'EUR' }}</td>
-      <td>{{ city.minimumPrice * 25 | currency:'EUR' }}</td>
       <td>{{ city.monthlyBuyEstimation | currency:'EUR' }}</td>
       <td [ngClass]="{
         'positive': isPositiveIncome(city.monthlyBuyEstimation, city.monthlyRentEstimation),
@@ -72,6 +68,8 @@
         'positive': isPositiveIncome(city.monthlyBuyEstimation, city.monthlyRentEstimation),
         'negative': !isPositiveIncome(city.monthlyBuyEstimation, city.monthlyRentEstimation)
       }">{{ city.monthlyDifference | currency:'EUR' }}</td>
+      <td class="positive">{{ city.minimumPrice | currency:'EUR' }}</td>
+      <td class="positive">{{ city.minimumPrice * 25 | currency:'EUR' }}</td>
     </tr>
   </table>
 </div>

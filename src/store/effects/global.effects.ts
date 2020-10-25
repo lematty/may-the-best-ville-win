@@ -70,8 +70,8 @@ export class GlobalEffects {
       const totalBuyPrice = averageBuyData.averagePriceBySurfaceArea * 25;
       const monthlyDifference = monthlyRentEstimation - monthlyBuyEstimation;
       const minimumPrice = this.calculationService.dropPriceToBePositive(averageBuyData.averagePriceBySurfaceArea, monthlyRentEstimation);
-      const monthsToPayLoan = averageBuyData.averagePriceBySurfaceArea / averageRentData.averagePriceBySurfaceArea;
 
+      const minValues = this.calculationService.getPostivityLine(minimumPrice);
       const activeCity = {
         city: action.city,
         color: action.color,
@@ -86,7 +86,7 @@ export class GlobalEffects {
         monthlyBuyEstimation,
         monthlyRentEstimation,
         monthlyDifference,
-        monthsToPayLoan,
+        minValues,
       };
       return [
         // fromGlobalActions.addCityToStore(activeCity),

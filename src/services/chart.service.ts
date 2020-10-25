@@ -47,7 +47,7 @@ export class ChartService {
     const citiesData: ChartDataSets[] = [];
     cityData.map((listing: UniversalListingProperties) => {
       const cityIndex = citiesData.findIndex((city: ChartDataSets) => city.label === listing.city);
-      const newData = { x: listing[xAxis], y: listing[yAxis] };
+      const newData: ChartPoint = { x: listing[xAxis], y: listing[yAxis] };
       if (cityIndex === -1) {
         citiesData.push({ label: listing.city, data: [newData] });
       } else {

@@ -39,6 +39,24 @@ export class CalculationsService {
     return averageBuyPrice;
   }
 
+  getPostivityLine(minPriceBySurfaceArea: number): Array<{ maxPrice: number, surfaceArea: number }> {
+    const maxPrice = 180000;
+    const minSurfaceArea = 14;
+    let currentSurfaceArea = minSurfaceArea;
+    let totalPrice = 0;
+    const minValues = [];
+    console.log('minPriceBySurfaceArea', minPriceBySurfaceArea);
+    while (totalPrice < maxPrice) {
+      totalPrice = minPriceBySurfaceArea * currentSurfaceArea;
+      console.log('totalPrice', totalPrice);
+      if (totalPrice < maxPrice) {
+        minValues.push({ maxPrice: totalPrice, minSurfaceArea: currentSurfaceArea });
+      }
+      currentSurfaceArea++;
+    }
+    return minValues;
+  }
+
   getAverages(listings: UniversalListingProperties[]): { averagePrice: number, averageSurfaceArea: number, averagePriceBySurfaceArea: number } {
     const prices = [];
     const surfaceAreas = [];

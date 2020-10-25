@@ -55,7 +55,7 @@ export interface ActiveCity {
   monthlyBuyEstimation: number;
   monthlyRentEstimation: number;
   monthlyDifference: number;
-  monthsToPayLoan: number;
+  minValues: Array<{ maxPrice: number, surfaceArea: number }>;
 }
 
 export type FranceMetrics = keyof FranceBuyListingJsonFormat;

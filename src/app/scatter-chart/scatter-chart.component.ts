@@ -1,5 +1,5 @@
 import { Component, OnChanges, OnDestroy, Input, SimpleChanges, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Chart, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
+import { Chart, ChartDataSets, ChartOptions, ChartTooltipItem, ChartPoint } from 'chart.js';
 import { ChartService } from '../../services';
 import { ActiveCity, Country, UniversalMetrics } from '../../../models';
 import { Store } from '@ngrx/store';
@@ -87,6 +87,10 @@ export class ScatterChartComponent implements AfterViewInit, OnChanges, OnDestro
     if (changes.datasets && changes.datasets.currentValue && this.chart) {
       console.log('ADDING DATA');
       this.chartService.addData(this.chart, this.datasets, this.lastAddedCity.color);
+      // const maxDataset: ChartDataSets[] = this.lastAddedCity.minValues.map((maxValue) => {
+      //   return { x: maxValue.maxPrice, y: maxValue.surfaceArea } as ChartDataSets;
+      // });
+      // this.chartService.addData(this.chart, maxDataset, this.lastAddedCity.color);
       this.datasetSize += 1;
       // this.chartService.updateDatasets(this.chart, this.datasets);
     }
